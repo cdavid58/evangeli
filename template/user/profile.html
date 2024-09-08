@@ -1,0 +1,503 @@
+{% extends '../base.html' %}
+{% load static %}
+{% block content %}
+<style>
+
+  .quiero_scroll{
+    max-height: 450px; 
+    overflow-y: auto;
+  }
+  ::-webkit-scrollbar-thumb {
+      background: #ccc;
+      border-radius: 4px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+      background: #b3b3b3;
+      box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.2);
+  }
+  ::-webkit-scrollbar-thumb:active {
+      background-color: #999999;
+  }
+
+</style>
+
+
+<button class="btn btn-primary declared_basic_payroll_btn" type="button" data-bs-toggle="modal" hidden data-bs-target="#declared_basic_payroll_modal">Launch demo modal</button>
+<div class="modal fade" id="declared_basic_payroll_modal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 500px">
+    <div class="modal-content position-relative">
+      <div class="position-absolute top-0 end-0 mt-2 me-2 z-index-1">
+        <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-0">
+        <div class="rounded-top-lg py-3 ps-4 pe-6 bg-light">
+          <h4 class="mb-1" id="modalExampleDemoLabel">Nómina Básica</h4>
+        </div>
+        <div class="p-4 pb-0">
+          <div class="mb-3">
+            <label class="col-form-label" for="recipient-name">Cuantos Días Laboro?</label>
+            <input class="form-control number_days_worked" id="recipient-name" type="number" />
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary close_modal_payroll" type="button" data-bs-dismiss="modal">Cerrar</button>
+        <button class="btn btn-primary generate_payroll_employee" type="button">Generar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<button class="btn btn-primary delete_basic_payroll_btn" type="button" data-bs-toggle="modal" hidden data-bs-target="#delete_basic_payroll_modal">Launch demo modal</button>
+<div class="modal fade" id="delete_basic_payroll_modal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 500px">
+    <div class="modal-content position-relative">
+      <div class="position-absolute top-0 end-0 mt-2 me-2 z-index-1">
+        <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base close_btn_payroll" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-0">
+        <div class="rounded-top-lg py-3 ps-4 pe-6 bg-light">
+          <h4 class="mb-1" id="modalExampleDemoLabel">Eliminar Nómina</h4>
+        </div>
+        <div class="p-4 pb-0">
+          <div class="mb-3">
+            <label class="col-form-label" for="recipient-name">Por qué quiere eliminar la nómina?</label>
+            <textarea class="form-control note_payroll" id="exampleFormControlTextarea1" style="resize: none;" rows="3"></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary close_modal_payroll_deleted" type="button" data-bs-dismiss="modal">Cerrar</button>
+        <button class="btn btn-primary deleted_payroll_employee" type="button">Eliminar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card mb-3">
+  <div class="card-header position-relative min-vh-25 mb-7">
+    <div class="bg-holder rounded-3 rounded-bottom-0" style="background-image:url('{% static "assets/img/generic/4.jpg" %}');">
+    </div>
+    <!--/.bg-holder-->
+
+    <div class="avatar avatar-5xl avatar-profile"><img class="rounded-circle img-thumbnail shadow-sm" src="{% static 'assets/img/team/2.jpg' %}" width="200" alt="" /></div>
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-lg-8">
+        <h4 class="mb-1"> 
+          {{user.first_name}} {{user.surname}}
+          {% if user.active %}
+            <span data-bs-toggle="tooltip" data-bs-placement="right" title="Activo">
+              <small class="fa fa-check-circle text-primary" data-fa-transform="shrink-4 down-2"></small>
+            </span>
+          {% endif %}
+        </h4>
+        <h5 class="fs-0 fw-normal">Senior Software Engineer at Technext Limited</h5>
+        <p class="text-500">{{user.municipality_name}} - Colombia</p>
+        <p class="text-500">{{user.email}}</p>
+        {% if request.session.permission %}
+          {% for i in request.session.permission %}
+            {% if i == "Facturacion"  or i == "Todos" %}
+              <button class="btn btn-falcon-primary btn-sm px-3 declared_basic_payroll" type="button">Declarar Nomina Básica</button>
+              <!-- <button class="btn btn-falcon-default btn-sm px-3 ms-2" type="button">Message</button> -->
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+        <div class="border-dashed-bottom my-4 d-lg-none"></div>
+      </div>
+      <div class="col ps-2 ps-lg-3">
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row g-0">
+  <div class="col-lg-8 pe-lg-2">
+    <!-- <div class="card mb-3">
+      <div class="card-header bg-light">
+        <h5 class="mb-0">Intro</h5>
+      </div>
+      <div class="card-body text-justify">
+        <p class="mb-0 text-1000">Dedicated, passionate, and accomplished Full Stack Developer with 9+ years of progressive experience working as an Independent Contractor for Google and developing and growing my educational social network that helps others learn programming, web design, game development, networking.</p>
+        <div class="collapse show" id="profile-intro">
+          <p class="mt-3 text-1000">I’ve acquired a wide depth of knowledge and expertise in using my technical skills in programming, computer science, software development, and mobile app development to developing solutions to help organizations increase productivity, and accelerate business performance. </p>
+          <p class="text-1000">It’s great that we live in an age where we can share so much with technology but I’m but I’m ready for the next phase of my career, with a healthy balance between the virtual world and a workplace where I help others face-to-face.</p>
+          <p class="text-1000 mb-0">There’s always something new to learn, especially in IT-related fields. People like working with me because I can explain technology to everyone, from staff to executives who need me to tie together the details and the big picture. I can also implement the technologies that successful projects need.</p>
+        </div>
+      </div>
+      <div class="card-footer bg-light p-0 border-top">
+        <button class="btn btn-link d-block w-100 btn-intro-collapse" type="button" data-bs-toggle="collapse" data-bs-target="#profile-intro" aria-expanded="true" aria-controls="profile-intro">Show <span class="less">less<span class="fas fa-chevron-up ms-2 fs--2"></span></span><span class="full">full<span class="fas fa-chevron-down ms-2 fs--2"></span></span></button>
+      </div>
+    </div> -->
+    <!-- <div class="card mb-3">
+      <div class="card-header bg-light d-flex justify-content-between">
+        <h5 class="mb-0">Associations</h5><a class="font-sans-serif" href="../../pages/miscellaneous/associations.html">All Associations</a>
+      </div>
+      <div class="card-body fs--1 pb-0">
+        <div class="row">
+          <div class="col-sm-6 mb-3">
+            <div class="d-flex position-relative align-items-center mb-2"><img class="d-flex align-self-center me-2 rounded-3" src="../../assets/img/logos/apple.png" alt="" width="50" />
+              <div class="flex-1">
+                <h6 class="fs-0 mb-0"><a class="stretched-link" href="#!">Apple</a></h6>
+                <p class="mb-1">3243 associates</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 mb-3">
+            <div class="d-flex position-relative align-items-center mb-2"><img class="d-flex align-self-center me-2 rounded-3" src="../../assets/img/logos/g.png" alt="" width="50" />
+              <div class="flex-1">
+                <h6 class="fs-0 mb-0"><a class="stretched-link" href="#!">Google</a></h6>
+                <p class="mb-1">34598 associates</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 mb-3">
+            <div class="d-flex position-relative align-items-center mb-2"><img class="d-flex align-self-center me-2 rounded-3" src="../../assets/img/logos/intel-2.png" alt="" width="50" />
+              <div class="flex-1">
+                <h6 class="fs-0 mb-0"><a class="stretched-link" href="#!">Intel</a></h6>
+                <p class="mb-1">7652 associates</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 mb-3">
+            <div class="d-flex position-relative align-items-center mb-2"><img class="d-flex align-self-center me-2 rounded-3" src="../../assets/img/logos/facebook.png" alt="" width="50" />
+              <div class="flex-1">
+                <h6 class="fs-0 mb-0"><a class="stretched-link" href="#!">Facebook</a></h6>
+                <p class="mb-1">765 associates</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div> -->
+    <div class="card mb-3">
+      <div class="card-header bg-light d-flex justify-content-between">
+        <h5 class="mb-0">Nominas Electrónicas</h5><a class="font-sans-serif" href="javascript:void(0);">Ver Todas</a>
+      </div>
+      <div class="card-body fs--1 p-0 quiero_scroll">
+        {% for i in user.payroll %}
+          <a class="border-bottom-0 notification rounded-0 border-x-0 border border-300" href="javascript:void(0);">
+            <div class="notification-avatar">
+              <div class="avatar avatar-xl me-3">
+                <div class="avatar-emoji rounded-circle "><span role="img" aria-label="Emoji">📋️</span></div>
+              </div>
+            </div>
+            <div class="notification-body">
+              <p class="mb-1">
+                <strong>{{user.first_name}} {{user.surname}}</strong> | Total de nómina: 
+                <strong>{{i.data_payroll.total_payroll}}$</strong> | Fecha: 
+                <strong>{{i.data_payroll.period.issue_date}}</strong>
+              </p>
+              <span class="notification-time">Estado de la nómina: {% if i.annulled %}<span class="text-danger"><strong>Anulada</strong></span>{% else %}<span class="text-success"><strong>Aprobada</strong></span>{% endif %}</span><br><br>
+              <button class="btn btn-falcon-primary btn-sm px-1 view_basic_payroll" id="{{i.data_payroll.cune}}" style="margin-right:2% ;">Ver en la DIAN</button>
+              {% if not i.annulled %}
+                <button class="btn btn-falcon-danger btn-sm px-1 delete_basic_payroll_profile" id="{{i.data_payroll.cune}}">Eliminar</button>
+              {% endif %}
+            </div>
+          </a>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-4 ps-lg-2">
+    <div class="sticky-sidebar">
+      <div class="card mb-3">
+        <div class="card-header bg-light">
+          <h5 class="mb-0">Experience</h5>
+        </div>
+        <div class="card-body fs--1">
+          <div class="d-flex"><a href="#!"> <img class="img-fluid" src="../../assets/img/logos/g.png" alt="" width="56" /></a>
+            <div class="flex-1 position-relative ps-3">
+              <h6 class="fs-0 mb-0">Big Data Engineer<span data-bs-toggle="tooltip" data-bs-placement="top" title="Verified"><small class="fa fa-check-circle text-primary" data-fa-transform="shrink-4 down-2"></small></span>
+              </h6>
+              <p class="mb-1"> <a href="#!">Google</a></p>
+              <p class="text-1000 mb-0">Apr 2012 - Present &bull; 6 yrs 9 mos</p>
+              <p class="text-1000 mb-0">California, USA</p>
+              <div class="border-dashed-bottom my-3"></div>
+            </div>
+          </div>
+          <div class="d-flex"><a href="#!"> <img class="img-fluid" src="../../assets/img/logos/apple.png" alt="" width="56" /></a>
+            <div class="flex-1 position-relative ps-3">
+              <h6 class="fs-0 mb-0">Software Engineer<span data-bs-toggle="tooltip" data-bs-placement="top" title="Verified"><small class="fa fa-check-circle text-primary" data-fa-transform="shrink-4 down-2"></small></span>
+              </h6>
+              <p class="mb-1"> <a href="#!">Apple</a></p>
+              <p class="text-1000 mb-0">Jan 2012 - Apr 2012 &bull; 4 mos</p>
+              <p class="text-1000 mb-0">California, USA</p>
+              <div class="border-dashed-bottom my-3"></div>
+            </div>
+          </div>
+          <div class="d-flex"><a href="#!"> <img class="img-fluid" src="../../assets/img/logos/nike.png" alt="" width="56" /></a>
+            <div class="flex-1 position-relative ps-3">
+              <h6 class="fs-0 mb-0">Mobile App Developer<span data-bs-toggle="tooltip" data-bs-placement="top" title="Verified"><small class="fa fa-check-circle text-primary" data-fa-transform="shrink-4 down-2"></small></span>
+              </h6>
+              <p class="mb-1"> <a href="#!">Nike</a></p>
+              <p class="text-1000 mb-0">Jan 2011 - Apr 2012 &bull; 1 yr 4 mos</p>
+              <p class="text-1000 mb-0">Beaverton, USA</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card mb-3">
+        <div class="card-header bg-light">
+          <h5 class="mb-0">Education</h5>
+        </div>
+        <div class="card-body fs--1">
+          <div class="d-flex"><a href="#!">
+              <div class="avatar avatar-3xl">
+                <div class="avatar-name rounded-circle"><span>SU</span></div>
+              </div>
+            </a>
+            <div class="flex-1 position-relative ps-3">
+              <h6 class="fs-0 mb-0"> <a href="#!">Stanford University<span data-bs-toggle="tooltip" data-bs-placement="top" title="Verified"><small class="fa fa-check-circle text-primary" data-fa-transform="shrink-4 down-2"></small></span></a></h6>
+              <p class="mb-1">Computer Science and Engineering</p>
+              <p class="text-1000 mb-0">2010 - 2014 • 4 yrs</p>
+              <p class="text-1000 mb-0">California, USA</p>
+              <div class="border-dashed-bottom my-3"></div>
+            </div>
+          </div>
+          <div class="d-flex"><a href="#!"> <img class="img-fluid" src="../../assets/img/logos/staten.png" alt="" width="56" /></a>
+            <div class="flex-1 position-relative ps-3">
+              <h6 class="fs-0 mb-0"> <a href="#!">Staten Island Technical High School<span data-bs-toggle="tooltip" data-bs-placement="top" title="Verified"><small class="fa fa-check-circle text-primary" data-fa-transform="shrink-4 down-2"></small></span></a></h6>
+              <p class="mb-1">Higher Secondary School Certificate, Science</p>
+              <p class="text-1000 mb-0">2008 - 2010 &bull; 2 yrs</p>
+              <p class="text-1000 mb-0">New York, USA</p>
+              <div class="border-dashed-bottom my-3"></div>
+            </div>
+          </div>
+          <div class="d-flex"><a href="#!"> <img class="img-fluid" src="../../assets/img/logos/tj-heigh-school.png" alt="" width="56" /></a>
+            <div class="flex-1 position-relative ps-3">
+              <h6 class="fs-0 mb-0"> <a href="#!">Thomas Jefferson High School for Science and Technology<span data-bs-toggle="tooltip" data-bs-placement="top" title="Verified"><small class="fa fa-check-circle text-primary" data-fa-transform="shrink-4 down-2"></small></span></a></h6>
+              <p class="mb-1">Secondary School Certificate, Science</p>
+              <p class="text-1000 mb-0">2003 - 2008 &bull; 5 yrs</p>
+              <p class="text-1000 mb-0">Alexandria, USA</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card mb-3 mb-lg-0">
+        <div class="card-header bg-light">
+          <h5 class="mb-0">Events</h5>
+        </div>
+        <div class="card-body fs--1">
+          <div class="d-flex btn-reveal-trigger">
+            <div class="calendar"><span class="calendar-month">Feb</span><span class="calendar-day">21</span></div>
+            <div class="flex-1 position-relative ps-3">
+              <h6 class="fs-0 mb-0"><a href="../../app/events/event-detail.html">Newmarket Nights</a></h6>
+              <p class="mb-1">Organized by <a href="#!" class="text-700">University of Oxford</a></p>
+              <p class="text-1000 mb-0">Time: 6:00AM</p>
+              <p class="text-1000 mb-0">Duration: 6:00AM - 5:00PM</p>Place: Cambridge Boat Club, Cambridge
+              <div class="border-dashed-bottom my-3"></div>
+            </div>
+          </div>
+          <div class="d-flex btn-reveal-trigger">
+            <div class="calendar"><span class="calendar-month">Dec</span><span class="calendar-day">31</span></div>
+            <div class="flex-1 position-relative ps-3">
+              <h6 class="fs-0 mb-0"><a href="../../app/events/event-detail.html">31st Night Celebration</a></h6>
+              <p class="mb-1">Organized by <a href="#!" class="text-700">Chamber Music Society</a></p>
+              <p class="text-1000 mb-0">Time: 11:00PM</p>
+              <p class="text-1000 mb-0">280 people interested</p>Place: Tavern on the Greend, New York
+              <div class="border-dashed-bottom my-3"></div>
+            </div>
+          </div>
+          <div class="d-flex btn-reveal-trigger">
+            <div class="calendar"><span class="calendar-month">Dec</span><span class="calendar-day">16</span></div>
+            <div class="flex-1 position-relative ps-3">
+              <h6 class="fs-0 mb-0"><a href="../../app/events/event-detail.html">Folk Festival</a></h6>
+              <p class="mb-1">Organized by <a href="#!" class="text-700">Harvard University</a></p>
+              <p class="text-1000 mb-0">Time: 9:00AM</p>
+              <p class="text-1000 mb-0">Location: Cambridge Masonic Hall Association</p>Place: Porter Square, North Cambridge
+            </div>
+          </div>
+        </div>
+        <div class="card-footer bg-light p-0 border-top"><a class="btn btn-link d-block w-100" href="../../app/events/event-list.html">All Events<span class="fas fa-chevron-right ms-1 fs--2"></span></a></div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- <div class="card mt-3">
+  <div class="card-header bg-light">
+    <div class="row align-items-center">
+      <div class="col">
+        <h5 class="mb-0" id="followers">Followers <span class="d-none d-sm-inline-block">(233)</span></h5>
+      </div>
+      <div class="col text-end"><a class="font-sans-serif" href="../../app/social/followers.html">All Members</a>
+      </div>
+    </div>
+  </div>
+  <div class="card-body bg-light px-1 py-0">
+    <div class="row g-0 text-center fs--1">
+      <div class="col-6 col-md-4 col-lg-3 col-xxl-2 mb-1">
+        <div class="bg-white dark__bg-1100 p-3 h-100"><a href="../../pages/user/profile.html"><img class="img-thumbnail img-fluid rounded-circle mb-3 shadow-sm" src="../../assets/img/team/1.jpg" alt="" width="100" /></a>
+          <h6 class="mb-1"><a href="../../pages/user/profile.html">Emilia Clarke</a>
+          </h6>
+          <p class="fs--2 mb-1"><a class="text-700" href="#!">Technext limited</a></p>
+        </div>
+      </div>
+      <div class="col-6 col-md-4 col-lg-3 col-xxl-2 mb-1">
+        <div class="bg-white dark__bg-1100 p-3 h-100"><a href="../../pages/user/profile.html"><img class="img-thumbnail img-fluid rounded-circle mb-3 shadow-sm" src="../../assets/img/team/2.jpg" alt="" width="100" /></a>
+          <h6 class="mb-1"><a href="../../pages/user/profile.html">Kit Harington</a>
+          </h6>
+          <p class="fs--2 mb-1"><a class="text-700" href="#!">Harvard Korea Society</a></p>
+        </div>
+      </div>
+      <div class="col-6 col-md-4 col-lg-3 col-xxl-2 mb-1">
+        <div class="bg-white dark__bg-1100 p-3 h-100"><a href="../../pages/user/profile.html"><img class="img-thumbnail img-fluid rounded-circle mb-3 shadow-sm" src="../../assets/img/team/3.jpg" alt="" width="100" /></a>
+          <h6 class="mb-1"><a href="../../pages/user/profile.html">Sophie Turner</a>
+          </h6>
+          <p class="fs--2 mb-1"><a class="text-700" href="#!">Graduate Student Council</a></p>
+        </div>
+      </div>
+      <div class="col-6 col-md-4 col-lg-3 col-xxl-2 mb-1">
+        <div class="bg-white dark__bg-1100 p-3 h-100"><a href="../../pages/user/profile.html"><img class="img-thumbnail img-fluid rounded-circle mb-3 shadow-sm" src="../../assets/img/team/4.jpg" alt="" width="100" /></a>
+          <h6 class="mb-1"><a href="../../pages/user/profile.html">Peter Dinklage</a>
+          </h6>
+          <p class="fs--2 mb-1"><a class="text-700" href="#!">Art Club, MIT</a></p>
+        </div>
+      </div>
+      <div class="col-6 col-md-4 col-lg-3 col-xxl-2 mb-1">
+        <div class="bg-white dark__bg-1100 p-3 h-100"><a href="../../pages/user/profile.html"><img class="img-thumbnail img-fluid rounded-circle mb-3 shadow-sm" src="../../assets/img/team/5.jpg" alt="" width="100" /></a>
+          <h6 class="mb-1"><a href="../../pages/user/profile.html">Nikolaj Coster</a>
+          </h6>
+          <p class="fs--2 mb-1"><a class="text-700" href="#!">Archery Club, MIT</a></p>
+        </div>
+      </div>
+      <div class="col-6 col-md-4 col-lg-3 col-xxl-2 mb-1">
+        <div class="bg-white dark__bg-1100 p-3 h-100"><a href="../../pages/user/profile.html"><img class="img-thumbnail img-fluid rounded-circle mb-3 shadow-sm" src="../../assets/img/team/6.jpg" alt="" width="100" /></a>
+          <h6 class="mb-1"><a href="../../pages/user/profile.html">Isaac Hempstead</a>
+          </h6>
+          <p class="fs--2 mb-1"><a class="text-700" href="#!">Asymptones</a></p>
+        </div>
+      </div>
+      <div class="col-6 col-md-4 col-lg-3 col-xxl-2 mb-1">
+        <div class="bg-white dark__bg-1100 p-3 h-100"><a href="../../pages/user/profile.html"><img class="img-thumbnail img-fluid rounded-circle mb-3 shadow-sm" src="../../assets/img/team/7.jpg" alt="" width="100" /></a>
+          <h6 class="mb-1"><a href="../../pages/user/profile.html">Alfie Allen</a>
+          </h6>
+          <p class="fs--2 mb-1"><a class="text-700" href="#!">Brain Trust</a></p>
+        </div>
+      </div>
+      <div class="col-6 col-md-4 col-lg-3 col-xxl-2 mb-1">
+        <div class="bg-white dark__bg-1100 p-3 h-100"><a href="../../pages/user/profile.html"><img class="img-thumbnail img-fluid rounded-circle mb-3 shadow-sm" src="../../assets/img/team/8.jpg" alt="" width="100" /></a>
+          <h6 class="mb-1"><a href="../../pages/user/profile.html">Iain Glen</a>
+          </h6>
+          <p class="fs--2 mb-1"><a class="text-700" href="#!">GSAS Action Coalition</a></p>
+        </div>
+      </div>
+      <div class="col-6 col-md-4 col-lg-3 col-xxl-2 mb-1">
+        <div class="bg-white dark__bg-1100 p-3 h-100"><a href="../../pages/user/profile.html"><img class="img-thumbnail img-fluid rounded-circle mb-3 shadow-sm" src="../../assets/img/team/9.jpg" alt="" width="100" /></a>
+          <h6 class="mb-1"><a href="../../pages/user/profile.html">Liam Cunningham</a>
+          </h6>
+          <p class="fs--2 mb-1"><a class="text-700" href="#!">Caving Club, MIT</a></p>
+        </div>
+      </div>
+      <div class="col-6 col-md-4 col-lg-3 col-xxl-2 mb-1">
+        <div class="bg-white dark__bg-1100 p-3 h-100"><a href="../../pages/user/profile.html"><img class="img-thumbnail img-fluid rounded-circle mb-3 shadow-sm" src="../../assets/img/team/10.jpg" alt="" width="100" /></a>
+          <h6 class="mb-1"><a href="../../pages/user/profile.html">John Bradley</a>
+          </h6>
+          <p class="fs--2 mb-1"><a class="text-700" href="#!">Chess Club</a></p>
+        </div>
+      </div>
+      <div class="col-6 col-md-4 col-lg-3 col-xxl-2 mb-1">
+        <div class="bg-white dark__bg-1100 p-3 h-100"><a href="../../pages/user/profile.html"><img class="img-thumbnail img-fluid rounded-circle mb-3 shadow-sm" src="../../assets/img/team/11.jpg" alt="" width="100" /></a>
+          <h6 class="mb-1"><a href="../../pages/user/profile.html">Rory McCann</a>
+          </h6>
+          <p class="fs--2 mb-1"><a class="text-700" href="#!">Chamber Music Society</a></p>
+        </div>
+      </div>
+      <div class="col-6 col-md-4 col-lg-3 col-xxl-2 mb-1">
+        <div class="bg-white dark__bg-1100 p-3 h-100"><a href="../../pages/user/profile.html"><img class="img-thumbnail img-fluid rounded-circle mb-3 shadow-sm" src="../../assets/img/team/12.jpg" alt="" width="100" /></a>
+          <h6 class="mb-1"><a href="../../pages/user/profile.html">Joe Dempsie</a>
+          </h6>
+          <p class="fs--2 mb-1"><a class="text-700" href="#!">Clubchem</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> -->
+{% endblock %}
+{% block script %}
+
+  <script>
+    $(document).ready(function(){
+
+      id_cune = null
+      $('#delete_basic_payroll_modal').on('shown.bs.modal', function () {
+          $(".note_payroll").focus()
+      })
+
+      $(document).on('click','.deleted_payroll_employee',function(){
+        console.log(id)
+        $.ajax({
+          url: "{% url 'Delete_Payroll' %}",
+          data:{'cune': id, 'pk_employee': parseInt("{{user.pk_employee}}"), 'note':$(".note_payroll").val()},
+          success: function(e){
+            e = JSON.parse(e)
+            if(e.result){
+              noti_person('Tarea Finalizada', e.message)
+              $(".note_payroll").val('')
+              $(".close_modal_payroll_deleted").click()
+              location.reload(true)
+            }
+            else{
+              noti_person('Error', e.message)
+            }
+          }
+        })
+      })
+
+      $(".close_btn_payroll").click(function(){$(".note_payroll").val('')})
+      $(".close_modal_payroll_deleted").click(function(){$(".note_payroll").val('')})
+
+      $(".delete_basic_payroll_profile").click(function(){
+        id = $(this).attr('id')
+        $(".delete_basic_payroll_btn").click()
+      })
+
+      $('#declared_basic_payroll_modal').on('shown.bs.modal', function () {
+        $(".number_days_worked").focus()
+      })
+
+      $(".transition-base").click(function(){
+        $(".number_days_worked").val('')
+      })
+
+      $(".close_modal_payroll").click(function(){
+        $(".number_days_worked").val('')
+      })
+
+      $(".declared_basic_payroll").click(function(){
+        $(".declared_basic_payroll_btn").click()
+      })
+
+      $(document).on('click','.view_basic_payroll', function(){
+        var id = $(this).attr('id');
+        var url = `https://catalogo-vpfe.dian.gov.co/document/ShowDocumentToPublic/${id}`
+        window.open(url, '_blank');
+      })
+
+      $(".generate_payroll_employee").click(function(){
+        $.ajax({
+          url: "{% url 'Basic_Payroll' %}",
+          data: {'pk_employee': parseInt("{{user.pk_employee}}") , "worked_days": parseInt($(".number_days_worked").val()) },
+          success: function(e){
+            e = JSON.parse(e)
+            console.log(e)
+            if(e.result){
+              noti_person('Tarea Finalizada', e.message)
+              $(".number_days_worked").val('')
+              $(".close_modal_payroll").click()
+              location.reload(true)
+            }
+            else{
+              noti_person('Error', e.message)
+            }
+          }
+        })
+      })
+
+    })
+  </script>
+
+{% endblock %}

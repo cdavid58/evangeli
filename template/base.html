@@ -1,0 +1,657 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en-US" dir="ltr">
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="generator" content="Gatsby 4.25.8">
+    <meta data-react-helmet="true" charset="utf-8">
+    <meta data-react-helmet="true" name="robots" content="index">
+    <meta data-react-helmet="true" http-equiv="Cache-control" content="public">
+    <meta data-react-helmet="true" property="og:title" content="">
+
+    <style>
+      input[type=number]::-webkit-inner-spin-button, 
+      input[type=number]::-webkit-outer-spin-button { 
+        -webkit-appearance: none; 
+        margin: 0; 
+      }
+
+      input[type=number] { -moz-appearance:textfield; }
+    </style>
+    <title>Evansoft</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'letra.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'letra.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'letra.png' %}">
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'letra.ico' %}">
+    <link rel="manifest" href="{% static 'assets/img/favicons/manifest.json' %}">
+    <meta name="msapplication-TileImage" content="{% static 'assets/img/favicons/mstile-150x150.png' %}">
+    <meta name="theme-color" content="#ffffff">
+    <script src="{% static 'assets/js/config.js' %}"></script>
+    <script src="{% static 'vendors/overlayscrollbars/OverlayScrollbars.min.js' %}"></script>
+
+    <link href="{% static 'vendors/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,500,600,700%7cPoppins:300,400,500,600,700,800,900&amp;display=swap" rel="stylesheet">
+    <link href="{% static 'vendors/overlayscrollbars/OverlayScrollbars.min.css' %}" rel="stylesheet">
+    <link href="{% static 'assets/css/theme-rtl.min.css' %}" rel="stylesheet" id="style-rtl">
+    <link href="{% static 'assets/css/theme.min.css' %}" rel="stylesheet" id="style-default">
+    <link href="{% static 'assets/css/user-rtl.min.css' %}" rel="stylesheet" id="user-style-rtl">
+    <link href="{% static 'assets/css/user.min.css' %}" rel="stylesheet" id="user-style-default">
+    <link href="{% static 'vendors/dropzone/dropzone.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'vendors/choices/choices.min.css' %}" rel="stylesheet" />
+    <script type="text/javascript" src="https://checkout.wompi.co/widget.js"></script>
+    <link href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.dataTables.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css">
+    <style>
+      #example td:nth-child(1),
+      #example th:nth-child(1) {
+        display: none;
+      }
+
+      @media screen and (max-width: 768px) {
+        
+        #example td:nth-child(1),
+        #example th:nth-child(1) {
+          display: block;
+        }
+
+
+        #example td:nth-child(2),
+        #example th:nth-child(2) {
+          display: none;
+        }
+
+        #example td:nth-child(3),
+        #example th:nth-child(3) {
+          display: none;
+        }
+
+        #example td:nth-child(4),
+        #example th:nth-child(4) {
+          display: none;
+        }
+        #example td:nth-child(5),
+        #example th:nth-child(5) {
+          display: none;
+        }
+        #example td:nth-child(6),
+        #example th:nth-child(6) {
+          display: none;
+        }
+        #example td:nth-child(5),
+        #example th:nth-child(5) {
+          display: none;
+        }
+        #example td:nth-child(6),
+        #example th:nth-child(6) {
+          display: none;
+        }
+
+        #example td:nth-child(7),
+        #example th:nth-child(7) {
+          display: none;
+        }
+
+        #example td:nth-child(8),
+        #example th:nth-child(8) {
+          display: none;
+        }
+      }
+      .btn-excel:hover {
+        color: white;
+      }
+      .btn-pdf:hover {
+        color: white;
+      }
+    </style>
+    {% block styles %}{% endblock %}
+    <script>
+      var isRTL = JSON.parse(localStorage.getItem('isRTL'));
+      if (isRTL) {
+        var linkDefault = document.getElementById('style-default');
+        var userLinkDefault = document.getElementById('user-style-default');
+        linkDefault.setAttribute('disabled', true);
+        userLinkDefault.setAttribute('disabled', true);
+        document.querySelector('html').setAttribute('dir', 'rtl');
+      } else {
+        var linkRTL = document.getElementById('style-rtl');
+        var userLinkRTL = document.getElementById('user-style-rtl');
+        linkRTL.setAttribute('disabled', true);
+        userLinkRTL.setAttribute('disabled', true);
+      }
+    </script>
+  </head>
+
+  <body>
+    <main class="main" id="top">
+
+      <div class="container" data-layout="container">
+        <script>
+          var isFluid = JSON.parse(localStorage.getItem('isFluid'));
+          if (isFluid) {
+            var container = document.querySelector('[data-layout]');
+            container.classList.remove('container');
+            container.classList.add('container-fluid');
+          }
+        </script>
+          {% include './menu_web.html' %}
+        <div class="content">
+          <nav class="navbar navbar-light navbar-glass navbar-top navbar-expand mb-3">
+            <button class="btn navbar-toggler-humburger-icon navbar-toggler me-1 me-sm-3" type="button" data-bs-toggle="collapse" data-bs-target="#navbarVerticalCollapse" aria-controls="navbarVerticalCollapse" aria-expanded="false" aria-label="Toggle Navigation"><span class="navbar-toggle-icon"><span class="toggle-line"></span></span></button>
+            <a class="navbar-brand me-1 me-sm-3" href="index.html">
+              <div class="d-flex align-items-center"><img class="me-2" src="{% static 'letra.png' %}" alt="" width="40" /><span class="font-sans-serif">Evansoft</span>
+              </div>
+            </a>
+            <ul class="navbar-nav align-items-center d-none d-lg-block">
+              <li class="nav-item">
+                <div class="search-box" data-list='{"valueNames":["title"]}'>
+                  {% block search %}{% endblock %}
+                </div>
+              </li>
+            </ul>
+            <ul class="navbar-nav navbar-nav-icons ms-auto flex-row align-items-center">
+              <li class="nav-item">
+                <div class="theme-control-toggle fa-icon-wait px-2">
+                  <input class="form-check-input ms-0 theme-control-toggle-input" id="themeControlToggle" type="checkbox" data-theme-control="theme" value="dark" />
+                  <label class="mb-0 theme-control-toggle-label theme-control-toggle-light" for="themeControlToggle" data-bs-toggle="tooltip" data-bs-placement="left" title="Cambiar a tema claro"><span class="fas fa-sun fs-0"></span></label>
+                  <label class="mb-0 theme-control-toggle-label theme-control-toggle-dark" for="themeControlToggle" data-bs-toggle="tooltip" data-bs-placement="left" title="Cambiar a tema oscuro"><span class="fas fa-moon fs-0"></span></label>
+                </div>
+              </li>
+              <!-- <li class="nav-item">
+                <a class="nav-link px-0 notification-indicator notification-indicator-warning notification-indicator-fill fa-icon-wait" href=""><span class="fas fa-shopping-cart" data-fa-transform="shrink-7" style="font-size: 33px;"></span><span class="notification-indicator-number value_cart">{{request.session.carrito}}</span></a>
+
+              </li> -->
+              <li class="nav-item dropdown">
+                <a class="nav-link px-0 fa-icon-wait campana" id="navbarDropdownNotification" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <span class="fas fa-bell" data-fa-transform="shrink-6" style="font-size: 33px;"></span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-end dropdown-menu-card dropdown-menu-notification" aria-labelledby="navbarDropdownNotification">
+                  <div class="card card-notification shadow-none">
+                    <div class="card-header">
+                      <div class="row justify-content-between align-items-center">
+                        <div class="col-auto">
+                          <h6 class="card-header-title mb-0">Notificaciones</h6>
+                        </div>
+                        <div class="col-auto ps-0 ps-sm-3"><a class="card-link fw-normal all_read" href="javascript:void(0);">Todos como leidos</a></div>
+                      </div>
+                    </div>
+                    <div class="scrollbar-overlay" style="max-height:19rem">
+                      <div class="list-group list-group-flush fw-normal fs--1">
+                        <div class="list-group-title border-bottom">NEW</div>
+                        <div class="list-group-item list_notifications">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="card-footer text-center border-top"><a class="card-link d-block" href="app/social/notifications.html">Ver Todo</a></div>
+                  </div>
+                </div>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link pe-0" id="navbarDropdownUser" href="javascript:void(0);" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <div class="avatar avatar-xl">
+                    <img class="rounded-circle photo_miniature_profile" src="{{request.session.logo}}" alt="" />
+                  </div>
+                </a>
+                <div class="dropdown-menu dropdown-menu-end py-0" aria-labelledby="navbarDropdownUser">
+                  <div class="bg-white dark__bg-1000 rounded-2 py-2">
+                    <!-- <a class="dropdown-item" href="javascript:void(0);">Perfil</a>
+                    <a class="dropdown-item" href="javascript:void(0);">Configuración</a>
+                    <div class="dropdown-divider"></div> -->
+                    <a class="dropdown-item logout" href="javascript:void(0);">Salir</a>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </nav>
+          <div class="alert alert-danger alert_reset" hidden role="alert">
+            Actualizando en <span class="reset_count">10</span> segundos
+          </div>
+          {% block content %}{% endblock %}
+
+          <footer class="footer">
+            <div class="row g-0 justify-content-between fs--1 mt-4 mb-3">
+              <div class="col-12 col-sm-auto text-center">
+                <p class="mb-0 text-600">
+                  <span class="d-none d-sm-inline-block">
+                    <script type="text/javascript">
+                      document.write(new Date().getFullYear());
+                    </script>
+                    &copy; |
+                  </span>
+                  <br class="d-sm-none" />
+                  Developed by <a href="">Evansoft</a>
+                </p>
+              </div>
+              <div class="col-12 col-sm-auto text-center">
+                <p class="mb-0 text-600">v1.0</p>
+              </div>
+            </div>
+          </footer>
+        </div>
+      </div>
+    </main>
+
+
+    
+
+    <button class="btn btn-primary close_the_box_modal" type="button" data-bs-toggle="modal" hidden data-bs-target="#close_the_box_modal">Launch demo modal</button>
+    <div class="modal fade" id="close_the_box_modal" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 500px">
+        <div class="modal-content position-relative">
+          <div class="position-absolute top-0 end-0 mt-2 me-2 z-index-1">
+            <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body p-0">
+            <div class="rounded-top-lg py-3 ps-4 pe-6 bg-light">
+              <h4 class="mb-1" id="modalExampleDemoLabel">Seleccione las fechas</h4>
+            </div>
+            <div class="p-4 pb-0">
+              <form>
+                <div class="mb-3">
+                  <label class="col-form-label" for="recipient-name">Desde:</label>
+                  <input class="form-control date_from" id="recipient-name" type="date" />
+                </div>
+                <div class="mb-3">
+                  <label class="col-form-label" for="message-text">Hasta:</label>
+                  <input class="form-control date_to" id="recipient-name" type="date" />
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cerrar</button>
+            <button class="btn btn-primary create_report_close_the_box" type="button">Generar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <a id="downloadLink" hidden download="Reporte_Cierre_De_Caja.pdf">Descargar PDF</a>
+
+
+
+
+    <button class="btn btn-primary excel_report_inventory_history" type="button" data-bs-toggle="modal" hidden data-bs-target="#excel_report_inventory_history">Launch demo modal</button>
+
+    <div class="modal fade" id="excel_report_inventory_history" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 500px">
+        <div class="modal-content position-relative">
+          <div class="position-absolute top-0 end-0 mt-2 me-2 z-index-1">
+            <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body p-0">
+            <div class="rounded-top-lg py-3 ps-4 pe-6 bg-light">
+              <h4 class="mb-1" id="modalExampleDemoLabel">Seleccione las fechas</h4>
+            </div>
+            <div class="p-4 pb-0">
+              <form>
+                <div class="mb-3">
+                  <label class="col-form-label" for="recipient-name">Desde:</label>
+                  <input class="form-control date_from_inventory_history" id="recipient-name" type="date" />
+                </div>
+                <div class="mb-3">
+                  <label class="col-form-label" for="message-text">Hasta:</label>
+                  <input class="form-control date_to_inventory_history" id="recipient-name" type="date" />
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cerrar</button>
+            <button class="btn btn-primary create_report_inventory_history" type="button">Generar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <a id="downloadLinkExcel" hidden download="Reporte_Historico_Moviento_Inventario.xlsx">Descargar PDF</a>
+
+
+    <script src="{% static 'jquery-3.6.4.min.js' %}"></script>
+    <script src="{% static 'jquery-ui.js' %}"></script>
+    <script lang="javascript" src="https://cdn.sheetjs.com/xlsx-0.20.0/package/dist/xlsx.full.min.js"></script>
+
+    <script>
+      totals = []
+      _totales = []
+      var date_list
+      var salesData = null
+      function generateDateArray() {
+        var currentDate = new Date();
+        var currentDayOfWeek = currentDate.getDay();
+        var days = [];
+        var monday = new Date(currentDate);
+        monday.setDate(monday.getDate() - currentDayOfWeek);
+        for (var i = 0; i < 7; i++) {
+          var date = new Date(monday);
+          date.setDate(date.getDate() + i);
+          days.push(date.toISOString().slice(0, 10));
+        }
+        return days;
+      }
+      date_list = generateDateArray()[0]
+      $.ajax({
+        url:"{% url 'Get_Selling_By_Date' %}",
+        data:{'date_start': date_list},
+        success:function(e){
+          e = JSON.parse(e)
+          if(e.length > 0){
+            for(j = 0; j < e.length; j++){
+              totals.push(e[j].date)
+             a = e[j]['date']
+             _totales.push(a)
+            }
+          }
+          else{
+            totals = [0,0,0,0,0,0,0]
+          }
+          salesData = {
+            lastMonth: totals
+          };
+        }
+      })
+
+      function generateFormat_David() {
+        var currentDate = new Date();
+        var currentDayOfWeek = currentDate.getDay();
+        var days = [];
+        var monday = new Date(currentDate);
+        monday.setDate(monday.getDate() - currentDayOfWeek + 1);
+        for (var i = 0; i < 7; i++) {
+          var date = new Date(monday);
+          date.setDate(date.getDate() + i);
+          days.push(date.toISOString().slice(0, 10));
+        }
+        return days;
+      }
+    </script>
+    <script src="{% static 'vendors/popper/popper.min.js' %}"></script>
+    <script src="{% static 'vendors/bootstrap/bootstrap.min.js' %}"></script>
+    <script src="{% static 'vendors/anchorjs/anchor.min.js' %}"></script>
+    <script src="{% static 'vendors/is/is.min.js' %}"></script>
+    <script src="{% static 'vendors/tinymce/tinymce.min.js' %}"></script>
+    <script src="{% static 'vendors/swiper/swiper-bundle.min.js' %}"></script>
+    <script src="{% static 'vendors/echarts/echarts.min.js' %}"></script>
+    <script src="{% static 'vendors/fontawesome/all.min.js' %}"></script>
+    <script src="{% static 'vendors/lodash/lodash.min.js' %}"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=window.scroll"></script>
+    <script src="{% static 'vendors/list.js/list.min.js' %}"></script>
+    <script src="{% static 'assets/js/theme.js' %}"></script>
+    <script src="{% static 'notify.js' %}"></script>
+    <script src="{% static 'vendors/dropzone/dropzone.min.js' %}"></script>
+    <script src="{% static 'vendors/choices/choices.min.js' %}"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.dataTables.min.css">
+
+
+    <!-- Buttons JS -->
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js"></script>
+
+    <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/pdfmake.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/vfs_fonts.js"></script>
+    
+    
+    <script>
+      Notification.requestPermission();
+
+      name_pdf = "Reporte de clientes"
+      name_excel = "Reporte de clientes"
+      title_pdf = "Reporte de clientes"
+      title_excel = "Reporte de clientes"
+      preferens_columm  = 0
+      btns_exist_user = false
+
+      function noti_person(title, message){
+        var notification = new Notification(title, {
+          body: message,
+          icon: "{{request.session.logo}}"
+        });
+      }
+
+      reset_content = false
+
+      function sleep_succes(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+      }
+
+      function queryPermission() {
+        $.ajax({
+          url: "{% url 'Query_Permissions' %}",
+          success: function (response) {
+              try {
+                  var data = JSON.parse(response);
+                  if (!data.change) {
+                      resetContent = true;
+                      $('.alert_reset').prop("hidden", false);
+                      time_sleep_success_shopping()();
+                  }
+              } catch (error) {
+                  console.error("Error parsing response:", error);
+              }
+              setTimeout(queryPermission, 10000);
+          },
+          error: function(xhr, status, error) {
+              console.error("Error:", status);
+              setTimeout(queryPermission, 10000);
+          }
+        });
+      }
+
+      async function time_sleep_success_shopping() {
+        const resetCount = $(".reset_count");
+        const alertReset = $('.alert_reset');
+        const maxWaitTime = 40000
+        const interval = 1000
+        let totalTimeWaited = 0
+        let secondsRemaining = 10
+        const updateCounter = () => {
+            resetCount.text(secondsRemaining)
+        };
+        const countdownInterval = setInterval(() => {
+            secondsRemaining--
+            updateCounter();
+
+            if (secondsRemaining <= 0) {
+                clearInterval(countdownInterval);
+                alertReset.prop("hidden", true)
+                location.href = "{{request.session.url_application}}/invoice/Get_List_Invoice/1/"
+            }
+        }, interval)
+        while (totalTimeWaited < maxWaitTime && secondsRemaining > 0) {
+            const remainingTime = maxWaitTime - totalTimeWaited
+            const secondsToWait = Math.min(remainingTime / 1000, 10)
+            await sleep_succes(secondsToWait * 1000)
+            totalTimeWaited += secondsToWait * 1000
+        }
+        clearInterval(countdownInterval);
+      }
+
+      $(document).ready(function(){
+        // console.clear()
+
+        $(document).on('keydown', function(event) {
+          if (event.key.toLowerCase() === 'f2') {
+            location.href="{% url 'Create_Invoice' %}"
+          }
+        });
+
+        $(".wait").click(function(){alert("Aun estamos trabajando en ello")})
+        tinymce.init({
+          selector: '.tinymce',
+        });
+
+        $(".close_the_box").click(function(){$(".close_the_box_modal").click()})
+
+        $(".excel_report_inventory_history_menu").click(function(){$(".excel_report_inventory_history").click()})
+
+        function create_report_close_the_box(){
+          $.ajax({
+            url: "{% url 'Close_The_Box' %}",
+            data:{'date_start': $(".date_from").val(), 'date_end': $(".date_to").val() },
+            success: function(e){
+              e = JSON.parse(e)
+              if(e.result){
+                noti_person("El reporte se descargo",'Tarea Finalizada')
+                $("#downloadLink").attr("href", e.path_file);
+                $("#downloadLink")[0].click();
+              }
+              else{
+                noti_person(`Ups!!!. Ha ocurrido un error ->>> Mensaje: ${e.message}`,'ERROR')
+              }
+            }
+          })
+        }
+
+        function create_report_inventory_history(){
+          $.ajax({
+            url: "{% url 'Inventory_History' %}",
+            data:{'date_start': $(".date_from_inventory_history").val(), 'date_end': $(".date_to_inventory_history").val() },
+            success: function(e){
+              e = JSON.parse(e)
+              if(e.result){
+                noti_person('Tarea Finalizada',"El reporte se descargo")
+                $("#downloadLinkExcel").attr("href", e.path_file);
+                $("#downloadLinkExcel")[0].click();
+              }
+              else{
+                noti_person(`Ups!!!. Ha ocurrido un error ->>> Mensaje: ${e.message}`,'ERROR')
+              }
+            }
+          })
+        }
+
+        $(".create_report_close_the_box").click(function(){
+          create_report_close_the_box()
+        })
+
+        $(".create_report_inventory_history").click(function(){
+          create_report_inventory_history()
+        })
+
+
+        //queryPermission()
+
+        permission = false
+        var permissionArray = {{ request.session.permission|safe }};
+        var includeExcelButton = permissionArray.includes('Todos');
+        var buttonsArray = []
+        if (includeExcelButton) {
+          buttonsArray = [
+            {
+              extend: 'pdfHtml5',
+              text: 'Exportar PDF',
+              className: 'btn bg-info btn-pdf',
+              exportOptions: {
+                columns: ':visible:not(:eq(' + preferens_columm + '))'
+              },
+              title:title_pdf,
+              filename: name_pdf
+            },
+            {
+              extend: 'excel',
+              text: 'Exportar Excel',
+              className: 'btn bg-success btn-excel',
+              titleAttr: 'Exportar a Excel',
+              exportOptions: {
+                columns: ':visible:not(:eq(' + preferens_columm + '))'
+              },
+              title:title_excel,
+              filename: name_excel
+            }
+          ]
+        }
+
+        $("#example").addClass("table-striped responsive nowrap")
+        btns_exist = buttonsArray
+        if(!btns_exist_user){
+          btns_exist = []
+        }
+        var table = $('#example').DataTable({
+          dom: 'Bfrtip',
+          buttons: btns_exist,
+          order: [[1, 'desc']],
+          columnDefs: [
+            {
+              targets: [0],
+              orderData: [0, 1],
+            }
+          ],
+          search: {
+            return: true
+          },
+          language: {
+            url: 'https://cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json'
+          }
+        });
+
+        $('#example tbody').on('click', 'td.details', function () {
+          var tr = $(this).closest('tr');
+          var row = table.row(tr);
+
+          if (row.child.isShown()) {
+              row.child.hide();
+              tr.removeClass('shown');
+          } else {
+              row.child(format(row.data())).show();
+              tr.addClass('shown');
+          }
+        });
+
+        url_path = {{request.session.url|safe}}
+
+        $(".logout").click(function(){
+          $.ajax({
+            url:"{% url 'LogOut' %}",
+            success:function(e){
+              e = JSON.parse(e)
+              if(e.result){
+                location.href = "{% url 'Login' %}"
+              }
+              else{
+                noti_person("ERROR", "Error en el cierre de la sessión")
+              }
+            }
+          })
+        })
+      })
+    </script>
+    
+    <script>
+
+      $(document).ready(function(){
+        _date_invoi = generateFormat_David()
+        totalSalesEcommerce(salesData, _totales, _date_invoi);
+
+        function generateFormat_David() {
+          var currentDate = new Date();
+          var currentDayOfWeek = currentDate.getDay();
+          var days = [];
+          var monday = new Date(currentDate);
+          monday.setDate(monday.getDate() - currentDayOfWeek + 1);
+          for (var i = 0; i < 7; i++) {
+            var date = new Date(monday);
+            date.setDate(date.getDate() + i);
+            days.push(date.toISOString().slice(0, 10));
+          }
+          return days;
+        }        
+      })
+
+    </script>
+
+    
+    {% block script %}{% endblock %}
+
+  </body>
+
+</html>

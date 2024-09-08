@@ -1,0 +1,110 @@
+{% extends '../base.html' %}
+{% load static %}
+{% block content %}
+<div class="card mb-3 p-1" data-date="{{ i.registration_date }}">
+  <div class="card-body p-2 overflow-hidden">
+    <div class="row">
+      <div class="col-md-5 col-12">
+        <h5>Lista de {{invoice}}</h5>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card mb-3" data-date="{{ i.registration_date }}">
+  <div class="card-body p-2 overflow-hidden">
+    <div class="table-responsive">
+      <table class="table" id="example" style="width:100%">
+        <thead>
+          <tr>
+            <th class="text-dark w-100 text-center fs-0">Información</th>
+            <th class="text-dark fs-0">Prefijo</th>
+            <th class="text-dark">Fecha</th>
+            <th class="text-dark">Cliente</th>
+            <th class="text-dark">Total</th>
+            <th class="text-dark">Estado</th>
+            <th class="text-dark">
+              {% if request.session.permission %}
+                {% for j in request.session.permission %}
+                  {% if j == "Editor" or j == "Todos" or j == "Eliminador"%}
+                    Acciones
+                  {% endif %}
+                {% endfor %}
+              {% endif %}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for i in page_obj %}
+            <tr>
+              <td class="details text-center">Ver más factura de "{{i.name_client}}"</td>
+              <td class="text-dark name{{i.pk_user}}">{{i.prefix}}-{{i.number}}</td>
+              <td class="text-dark date_invoice">{{i.date}}</td>
+              <td class="text-dark client">{{i.name_client}}</td>
+              <td class="text-dark">${{i.total}}</td>
+              <td class="text-dark">{% if type_invoice == '1' and i.state == "Sin enviar a la DIAN" %}Factura Vigente{% else %}{{i.state}}{% endif %}</td>
+              <td>
+                <a class="btn btn-primary" href="{% url 'View_Invoice' i.pk_invoice %}" type="button">Ver</a>
+                <button class="btn btn-falcon-default copy_invoice" id="{{i.pk_invoice}}" type="button"><span class="fas fa-print me-1"> </span></button>
+              </td>            
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% if total %}
+  <div class="card" data-date="{{ i.registration_date }}">
+    <div class="card-body p-2 overflow-hidden">
+      <div class="row col-12">
+        <h2 class="text-right">Total vendido hasta el dia de hoy: ${{total}}</h2>
+      </div>
+    </div>
+  </div>
+{% endif %}
+
+{% endblock %}
+{% block script %}
+  <script type="text/javascript" src="js/qz-tray.js"></script>
+  <script>
+
+    function format(data) {
+      return `
+          <div>ID: ${data[1]}</div>
+          <div>Fecha: ${data[2]}</div>
+          <div>Cliente: ${data[3]}</div>
+          <div>Total: ${data[4]}</div>
+          <div>Estado: ${data[5]}</div>
+          <div>Acciones: ${data[6]}</div>
+        `
+    }
+    preferens_columm  = 5
+    name_pdf = "Reporte de factura"
+    name_excel = "Reporte de factura"
+    btns_exist_user = true
+
+    $(document).ready(function () {
+
+      $('input[type="search"]').addClass('search')
+      
+      $(".copy_invoice").click(function(){
+        let screenWidth = window.screen.width;
+        let screenHeight = window.screen.height;
+        let windowWidth = 800; 
+        let windowHeight = 600;
+        let leftPosition = (screenWidth - windowWidth) / 2;
+        let topPosition = (screenHeight - windowHeight) / 2;
+        let params = `scrollbars=no,resizable=no,status=no,location=no,toolbar=no,menubar=no,width=${windowWidth},height=${windowHeight},left=${leftPosition},top=${topPosition}`;
+        let printWindow = window.open("{{request.session.url}}/invoice/Print_Invoice/"+this.id, "invoice", params);
+        if (printWindow) {
+          printWindow.onafterprint = function () {
+            printWindow.close();
+          };
+          printWindow.print();
+        }
+      })
+    });
+  </script>
+
+{% endblock %}

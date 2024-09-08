@@ -1,0 +1,182 @@
+{% extends '../base.html' %}
+{% load static %}
+{% block content %}
+
+<form enctype="multipart/form-data" class="update_inventory_excel">
+  <input type="file" class="data_inventory" accept=".xls, .xlsx" hidden>
+</form>
+
+
+<div class="card mb-3" data-date="{{ i.registration_date }}">
+  <div class="card-body p-2 overflow-hidden">
+    <div class="row">
+      <div class="col-md-3 mb-3 col-12">
+        <h4>Cuentas por Cobrar</h4>
+      </div>
+      <div class="col-md-2 col-12 ml-auto">  
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card" data-date="{{ i.registration_date }}">
+  <div class="card-body p-2 overflow-hidden">
+    <div class="table-responsive">
+      <table class="table" id="example" style="width:100%">
+        <thead>
+          <tr>
+            <th class="text-dark w-100 text-center fs-0">Información</th>
+            <th class="text-dark fs-0">Factura</th>
+            <th class="text-dark fs-0">CC / NIT</th>
+            <th class="text-dark fs-0">Cliente</th>
+            <th class="text-dark fs-0">Fecha</th>
+            <th class="text-dark fs-0">Fecha de V</th>
+            <th class="text-dark fs-0">Total Factura</th>
+            <th class="text-dark fs-0">Abono</th>
+            <th class="text-dark fs-0">Saldo P.</th>
+            <th class="text-dark fs-0">Total de días</th>
+            <th class="text-dark fs-0">Estado en Mora</th>
+            <th class="text-dark fs-0">Acción</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for i in page_obj %}
+            <tr>
+              <td class="details text-center">Ver más de {{i.number}}</td>
+              <td class="text-dark"> <span class="numner_invoice_{{i.pk_invoice}}">{{i.prefix}}-{{i.number}}</span></td>
+              <td class="text-dark">{{i.identification_number}}</td>
+              <td class="text-dark">{{i.name_client}}</td>
+              <td class="text-dark">{{i.date}}</td>
+              <td class="text-dark">{{i.due_date}}</td>
+              <td class="text-dark {{i.pk_invoice}}total">${{i.total}}</td>
+              <td class="text-dark {{i.pk_invoice}}pass">${{i.pass}}</td>
+              <td class="text-dark {{i.pk_invoice}}total_to_pay">${{i.total_to_pay}}</td>
+              <td class="text-dark">{{i.difference_in_days}}</td>
+              <td class="text-dark">{% if not i.arrears %}Sin cancelar{% endif %}</td>
+              <td class="text-dark">
+                <button class="btn btn-primary pass_btn" id="{{i.pk_invoice}}">
+                  Abonar
+                </button>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<button class="btn btn-primary pass_amount" type="button" data-bs-toggle="modal" hidden data-bs-target="#pass_amount_modal">Launch demo modal</button>
+    <div class="modal fade" id="pass_amount_modal" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 500px">
+        <div class="modal-content position-relative">
+          <div class="position-absolute top-0 end-0 mt-2 me-2 z-index-1">
+            <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base close_pass_invoice_icon" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body p-0">
+            <div class="rounded-top-lg py-3 ps-4 pe-6 bg-light">
+              <h4 class="mb-1 modalExampleDemoLabel" id="modalExampleDemoLabel"></h4>
+            </div>
+            <div class="p-4 pb-0">
+              <form>
+                <div class="mb-3">
+                  <label class="col-form-label" for="recipient-name">Monto a abonar:</label>
+                  <input class="form-control amount_pass" id="recipient-name" type="number" />
+                </div>
+                <div class="mb-3">
+                  <label class="col-form-label" for="message-text">Observaciones:</label>
+                  <textarea rows="5" style="resize: none;" class="form-control notes" placeholder="Observaciones"></textarea>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary close_pass_invoice" type="button" data-bs-dismiss="modal">Cerrar</button>
+            <button class="btn btn-primary create_pass_invoice" type="button">Abonar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+{% endblock %}
+{% block script %}
+
+  <script>
+    function format(data) {
+      return `
+          <div>N° Factura: ${data[1]}</div>
+          <div>CC / NIT: ${data[2]}</div>
+          <div>Cliente: ${data[3]}</div>
+          <div>Fecha: ${data[4]}</div>
+          <div>Fecha V: ${data[5]}</div>
+          <div>Total Fac: ${data[6]}</div>
+          <div>Abonado: ${data[7]}</div>
+          <div>Saldo P: ${data[8]}</div>
+          <div>Días Totales: ${data[9]}</div>
+          <div>Estado: ${data[10]}</div>
+          <div>Acción: ${data[11]}</div>
+        `
+    }
+    preferens_columm = 10;
+    name_pdf = "Reporte de cuentas por cobrar"
+    name_excel = "Reporte de cuentas por cobrar"
+    title_pdf = "Reporte de cuentas por cobrar"
+    title_excel = "Reporte de cuentas por cobrar"
+    btns_exist_user = true
+    id = null
+    $(document).ready(function(){
+      $('input[type="search"]').addClass('search')
+      $('#pass_amount_modal').on('shown.bs.modal', function() {
+          $('.amount_pass').focus()
+      });
+
+      $(".close_pass_invoice_icon").click(function(){
+        $('.amount_pass').val('')
+        $('.notes').val('')
+      })
+      $(".close_pass_invoice").click(function(){
+        $('.amount_pass').val('')
+        $('.notes').val('')
+      })
+
+      $(document).on('click',".pass_btn", function(){
+        id = this.id
+        $(".pass_amount").click()
+        number_invoice = $(".numner_invoice_"+id).text()
+        $(".modalExampleDemoLabel").text("Abonos a la factura "+number_invoice)
+      })
+
+      $('.create_pass_invoice').click(function(){
+        amount_pass = $(".amount_pass").val()
+        $.ajax({
+          url: "{% url 'Create_Pass_Invoice' %}",
+          data: {
+              "pk_invoice": id,
+              "amount": amount_pass,
+              "note": ($(".notes").val().length > 0) ? $(".notes").val() : "Abono a la factura",
+              "pk_employee": parseInt("{{request.session.pk_employee}}")
+          },
+          success: function(e){
+            e = JSON.parse(e)
+            if(e.result){
+              pass = parseInt($('.'+id+'pass').text().replace('$','')) + parseInt(amount_pass)
+              total = parseInt($('.'+id+'total').text().replace('$',''))
+              $('.'+id+'total_to_pay').text('$'+(total - pass))
+              $('.'+id+'pass').text('$'+(pass))
+              console.log(total - pass)
+              noti_person("Tarea Finalizada", e.message)
+              $(".close_pass_invoice").click()
+              $('.amount_pass').val('')
+            }
+            else
+              noti_person("Error", e.message)
+          }
+        })
+      })
+
+
+
+    })
+  </script>
+
+{% endblock %}

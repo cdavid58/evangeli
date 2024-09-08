@@ -1,0 +1,134 @@
+<div class="bill">
+  <div class="brand">
+    {{ company.name|title }}
+  </div>
+  <div class="address">
+    {{ company.address }} <br>
+    TLF No- {{ company.phone }}
+  </div>
+  <div class="shop-details">
+    CLIENTE: {{ client.name|title }}<br>
+    NIT CLIENTE: {{ client.identification_number }}
+  </div>
+  <div>
+    {% if type_document == 1 %}FACTURA POS {% else %}Documento de soporte electrónico temporal{% endif %} {% if invoice.annulled %}- ANULADA{% endif %}
+  </div>
+  <div class="bill-details" style="margin-bottom: 10px;">
+    <div>
+      <div>N° FACT: {{ number }}</div>
+    </div>
+    <div>
+      <div>FECHA: {{ invoice.date }}</div>
+      <div>HORA: 14:10</div>
+    </div>
+  </div>
+  <table class="table">
+    <thead>
+      <tr class="header">
+        <th>Código</th>
+        <th>Descripción</th>
+        <th>Cant.</th>
+        <th>IVA</th>
+        <th>Dcto.</th>
+        <th>IPO</th>
+        <th>UND</th>
+        <th>Subtotal</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for i in details %}
+      <tr class="items">
+        <td>{{ i.code }}</td>
+        <td>{{ i.name }}</td>
+        <td style="text-align: center;">{{ i.quantity }}</td>
+        <td style="text-align: center;">{{ i.iva }}</td>
+        <td style="text-align: center;">{{ i.discount }}</td>
+        <td style="text-align: center;">{{ i.ipo }}</td>
+        <td style="text-align: center;">{{ i.unit }}</td>
+        <td style="text-align: right;">{{ i.subtotals|floatformat:0 }}</td>
+      </tr>
+      {% endfor %}
+      <tr class="total">
+        <td colspan="7" style="text-align: right;">SUBTOTAL</td>
+        <td style="text-align: right;">{{ totals.subtotals }}</td>
+      </tr>
+      <tr>
+        <td colspan="7" style="text-align: right;">IVA</td>
+        <td style="text-align: right;">{{ totals.tax }}</td>
+      </tr>
+      <tr>
+        <td colspan="7" style="text-align: right;">ICO</td>
+        <td style="text-align: right;">{{ totals.ipo }}</td>
+      </tr>
+      <tr>
+        <td colspan="7" style="text-align: right;">Descuento</td>
+        <td style="text-align: right;">{{ totals.discount }}</td>
+      </tr>
+      <tr class="net-amount">
+        <td colspan="7" style="text-align: right;">TOTAL</td>
+        <td style="text-align: right;">{{ totals.totals }}</td>
+      </tr>
+    </tbody>
+  </table>
+  <div>
+    <span>Observaciones: {{ invoice.note }}</span>
+  </div>
+  <br>
+  Metodo de Pago: {{ invoice.metod }}<br>
+  Resolucion: {{ invoice.resolution.resolution }}<br>
+  Factura creada por Evansoft <br>
+  Gracias por su compra, vuelva pronto!
+</div>
+
+<style>
+  @import url('http://fonts.cdnfonts.com/css/vcr-osd-mono');
+  body {
+    font-family: 'VCR OSD Mono', monospace;
+    color: #000;
+    text-align: center;
+    font-size: 12px; /* Tamaño reducido para ajuste */
+    margin: 0;
+    padding: 0;
+  }
+  .bill {
+    width: 80mm;
+    padding: 5px;
+  }
+  .table {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 10px; /* Tamaño reducido para ajuste */
+  }
+  .table th, .items td {
+    border: 1px solid #000;
+    padding: 2px;
+    text-align: left;
+  }
+  .table th {
+    font-size: 10px;
+  }
+  .table .header {
+    border-top: 2px dashed #000;
+    border-bottom: 2px dashed #000;
+  }
+  .table .total td {
+    border-top: 2px dashed #000;
+    border-bottom: 2px dashed #000;
+  }
+  .table .net-amount td {
+    border-top: 2px dashed #000;
+  }
+  .table .net-amount {
+    border-bottom: 2px dashed #000;
+  }
+  @media print {
+    .hidden-print,
+    .hidden-print * {
+      display: none !important;
+    }
+  }
+</style>
+
+<script>
+  print()
+</script>

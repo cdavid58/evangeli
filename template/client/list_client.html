@@ -1,0 +1,127 @@
+{% extends '../base.html' %}
+{% load static %}
+{% block content %}
+
+<form enctype="multipart/form-data" class="update_inventory_excel">
+  <input type="file" class="data_inventory" accept=".xls, .xlsx" hidden>
+</form>
+
+
+<div class="card mb-3" data-date="{{ i.registration_date }}">
+  <div class="card-body p-2 overflow-hidden">
+    <div class="row">
+      <div class="col-md-3 mb-3 col-12">
+        <h4>Lista de Producto</h4>
+      </div>
+      <div class="col-md-2 col-12 ml-auto">
+        {% if request.session.permission %}
+          {% if "Creador" in request.session.permission or "Todos" in request.session.permission %}
+            <button class="btn btn-primary add_customer">Crear Cliente</button>
+          {% endif %}
+        {% endif %}   
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card" data-date="{{ i.registration_date }}">
+  <div class="card-body p-2 overflow-hidden">
+    <div class="table-responsive">
+      <table class="table" id="example" style="width:100%">
+        <thead>
+          <tr>
+            <th class="text-dark w-100 text-center fs-0">Información</th>
+            <th class="text-dark fs-0">CC / NIT</th>
+            <th class="text-dark">Razón Social</th>
+            <th class="text-dark">Teléfono</th>
+            <th class="text-dark">Dirección</th>
+            <th class="text-dark">E-Mail</th>
+            <th class="text-dark">
+              {% if request.session.permission %}
+                {% if "Editor" in request.session.permission or "Todos" in request.session.permission or "Eliminador" in request.session.permission %}
+                  Acciones
+                {% endif %}
+              {% endif %}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for i in page_obj %}
+            <tr>
+              <td class="details text-center">Ver más de {{i.name}}</td>
+              <td class="text-dark">{{i.identification_number}}</td>
+              <td class="text-dark">{{i.name}}</td>
+              <td class="text-dark">{{i.phone}}</td>
+              <td class="text-dark">{{i.address|truncatechars:20}}</td>
+              <td class="text-dark">{{i.email|truncatechars:20}}</td>
+              <td>
+                {% if request.session.permission %}
+                  {% if "Editor" in request.session.permission or "Todos" in request.session.permission %}
+                    <a href="{% url 'Edit_Customer' i.pk_customer %}" class="btn btn-primary edit" id="{{i.code}}">Editar</a>
+                    <a href="{% url 'Profile_Customer' i.identification_number %}" class="btn btn-primary">Ver</a>
+                  {% endif %}
+                  {% if "Eliminador" in request.session.permission or "Todos" in request.session.permission %}
+                    <button class="btn btn-danger delete" id="{{i.pk_customer}}">Eliminar</button>
+                  {% endif %}
+                {% endif %}              
+              </td>            
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+{% block script %}
+
+  <script>
+    function format(data) {
+      return `
+          <div>CC / NIT: ${data[1]}</div>
+          <div>Razón Social: ${data[2]}</div>
+          <div>Teléfono: ${data[3]}</div>
+          <div>Dirección: ${data[4]}</div>
+          <div>E-Mail: ${data[5]}</div>
+          <div>${data[6]}</div>
+        `
+    }
+
+    preferens_columm = 5;
+    name_pdf = "Reporte de clientes"
+    name_excel = "Reporte de clientes"
+    title_pdf = "Reporte de clientes"
+    title_excel = "Reporte de clientes"
+    btns_exist_user = true
+
+    $(document).ready(function(){
+
+      console.clear()
+
+      $('.add_customer').click(function(){
+        location.href = "{% url 'Create_Customer' %}"
+      })
+
+      $(document).on('click','.delete',function(){
+        $(this).closest('tr').remove();
+        id = this.id
+        $.ajax({
+          url:"{% url 'Delete_Client' %}",
+          data:{'pk_customer':id},
+          success: function(e){
+            data = JSON.parse(e)
+            if(data.result){
+              $.notify("Cliente eliminado con éxito",'success')
+            }
+            else{
+             $.notify(data.message,'error') 
+            }
+          }
+        })
+      })
+
+    })
+  </script>
+
+{% endblock %}

@@ -1,0 +1,654 @@
+{% extends '../base.html' %}
+{% block content %}
+
+<style>
+  .table-responsive {
+    max-height: 300px !important;
+    overflow-y: auto !important;
+  }
+</style>
+
+<div class="card mb-3" data-date="{{ i.registration_date }}">
+  <div class="card-body p-2 overflow-hidden">
+    <div class="row p-1">
+      <div class="col-md-6 col-12">
+        <h5>Agrega una compra</h5>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="card mb-3">
+  <div class="card-body">
+    <div class="row">
+        <div class="mb-3 col-md-2 col-12">
+          <label class="form-label" for="exampleFormControlInput1">N° de Factura</label>
+          <input class="form-control number_invoice" name="number_invoice" autofocus type="text" />
+        </div>
+        <div class="mb-3 col-md-3 col-12">
+          <label class="form-label" for="exampleFormControlInput1">Fecha de Factura</label>
+          <input class="form-control date_invoice" name="date_invoice" type="date" />
+        </div>
+        <div class="mb-3 col-md-4 col-12">
+          <label class="form-label" for="exampleFormControlInput1">Proveedor</label>
+          <select class="form-select list_supplier" size="1" name="client">
+            <option value="0" disabled selected>Seleccione Proveedor...</option>
+            {% for i in list_supplier %}
+              <option value="{{i.pk}}">{{i.name}}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="mb-3 col-md-3 col-12">
+          <label class="form-label" for="exampleFormControlInput1">Forma de Pago</label>
+          <select class="form-select paymentform" size="1" name="paymentform">
+            <option value="1">Efectivo</option>
+            <option value="2">Crédito</option>
+            <option value="3">Transferencia</option>
+          </select>
+        </div>
+        <div class="mb-3 col-md-3 col-12 due_date" style="display: none;">
+          <label class="form-label" for="exampleFormControlInput1">Fecha de Pago</label>
+          <input class="form-control date_invoice_due" name="date_invoice" type="date" />
+        </div>
+    </div>
+  </div>
+</div>
+<div class="card mb-3">
+  <div class="card-body">
+    <div class="row" style="padding: 10px !important;">
+      <div class="row">
+        <div class="mb-3 col-md-4 col-12">
+          <label class="form-label" for="exampleFormControlInput1">Producto</label>
+          <select class="form-select js-choice product_list_supplier text-dark" id="product_list_supplier" size="1">
+            <option value="1">No hay datos</option>
+          </select>
+        </div>
+        <div class="mb-3 col-md-2 col-12">
+          <label class="form-label" for="exampleFormControlInput1">Cantidad</label>
+          <input class="form-control quantity enter text-right" disabled name="date_invoice" type="number" />
+        </div>
+        <div class="mb-3 col-md-2 col-12">
+          <label class="form-label" for="exampleFormControlInput1">Costo</label>
+          <input class="form-control cost text-right enter" disabled name="date_invoice" type="number" />
+        </div>
+        <div class="mb-3 col-md-1 col-12">
+          <label class="form-label" for="exampleFormControlInput1">IVA</label>
+          <input class="form-control tax text-right enter" disabled disabled type="number" />
+        </div>
+        <div class="mb-3 col-md-2 col-12">
+          <label class="form-label" for="exampleFormControlInput1">ICO</label>
+          <input class="form-control ipo text-right enter" disabled type="number" />
+        </div>
+        <div class="mb-3 col-md-2 col-12">
+          <label class="form-label" for="exampleFormControlInput1">Total Costo UND</label>
+          <input class="form-control ipo text-right _total_cost" type="number" />
+        </div>
+
+        <div class="mb-3 col-md-2 col-12">
+          <label class="form-label" for="exampleFormControlInput1">Precio 1</label>
+          <input class="form-control text-right price1 number_price enter" disabled id="1" name="date_invoice" type="number" />
+        </div>
+        <div class="mb-3 col-md-2 col-12">
+          <label class="form-label" for="exampleFormControlInput1">Precio 2</label>
+          <input class="form-control text-right price2 number_price enter" disabled id="2" name="date_invoice" type="number" />
+        </div>
+        <div class="mb-3 col-md-2 col-12">
+          <label class="form-label" for="exampleFormControlInput1">Precio 3</label>
+          <input class="form-control text-right price3 number_price enter" disabled id="3" name="date_invoice" type="number" />
+        </div>
+        <div class="mb-3 col-md-2 col-12">
+          <label class="form-label" for="exampleFormControlInput1">Precio 4</label>
+          <input class="form-control text-right price4 number_price enter" disabled id="4" name="date_invoice" type="number" />
+        </div>
+        <div class="mb-3 col-md-2 col-12">
+          <label class="form-label" for="exampleFormControlInput1">Precio 5</label>
+          <input class="form-control text-right price5 number_price enter" disabled id="5" name="date_invoice" type="number" />
+        </div>
+        <div class="mb-3 col-md-2 col-12">
+          <label class="form-label" for="exampleFormControlInput1">Precio 6</label>
+          <input class="form-control text-right price6 number_price enter" disabled id="6" name="date_invoice" type="number" />
+        </div>
+        <div class="mb-3 col-md-2 col-12">
+          <label class="form-label" for="exampleFormControlInput1">Descuento</label>
+          <input class="form-control text-right discount number_price enter" name="discount" disabled id="5" type="number" />
+        </div>
+        <div class="mb-3 col-md-2 col-12">
+          <label class="form-label" for="exampleFormControlInput1">Ultra Procesado</label>
+          <input class="form-control text-right number_price ultra_processed" name="ultra_processed" disabled id="5" type="number" />
+        </div>
+        <div class="row utilidad">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card mb-3">
+  <div class="card-body p-2 overflow-hidden">
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Descripción</th>
+            <th>Cantidad</th>
+            <th>Costo</th>
+            <th>Descuento</th>
+            <th>Precio 1</th>
+            <th>Precio 2</th>
+            <th>Precio 3</th>
+            <th>Total Costo</th>
+            <th>Eliminar</th>
+          </tr>
+        </thead>
+        <tbody class="row_product"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="card mb-3">
+  <div class="card-body p-2 overflow-hidden">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+              <textarea rows="5" style="resize: none;" class="form-control notes" placeholder="Observaciones"></textarea>
+            </div>
+            <div class="col-md-2"></div>
+            <div class="col-md-4">
+                <div class="card mb-3">
+                    <div class="card-body p-2 overflow-hidden">
+                        <div class="row">
+                            <table class="table">
+                                <tbody class="">
+                                    <tr>
+                                        <td class="text-right text-dark">
+                                            SubTotal: 
+                                        </td>
+                                        <td class="text-right text-dark">
+                                          <span class="subtotal" style="text-align: center !important;">0</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-right text-dark">
+                                            Impuestos: 
+                                        </td>
+                                        <td class="text-right text-dark">
+                                          <span class="impuestos" style="text-align: center !important;">$0</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-right text-dark">
+                                            ICO: 
+                                        </td>
+                                        <td class="text-right text-dark">
+                                          <span class="ico" style="text-align: center !important;">$0</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-right text-dark">
+                                            Descuento: 
+                                        </td>
+                                        <td class="text-right text-dark">
+                                          <span class="descuento" style="text-align: center !important;">$0</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-right text-dark">
+                                            Total: 
+                                        </td>
+                                        <td class="text-right text-dark">
+                                          <span class="total_invoice" style="text-align: center !important;">$0</span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="card mb-3">
+  <div class="card-body p-2 overflow-hidden">
+    <div class="row justify-content-center">
+      <button class="btn btn-primary col-sm-10 col-11 register_shopping" type="button">Registrar Compra</button>
+    </div>
+  </div>
+</div>
+
+
+<button class="btn btn-primary modal_list_product" type="button" hidden data-bs-toggle="modal" data-bs-target="#modal_list_product"></button>
+
+<div class="modal fade" id="modal_list_product" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-centered" role="document" style="max-width:800px">
+    <div class="modal-content position-relative">
+      <div class="modal-body mb-3">
+          <div class="">
+          <table class="table" id="example" style="width:100%">
+            <thead>
+              <tr>
+                <th class="text-dark w-100 text-center fs-0">Codigo</th>
+                <th class="text-dark fs-0">Codigo</th>
+                <th class="text-dark fs-0">Producto</th>
+                <th class="text-dark">Cantidad</th>
+                <th class="text-dark">Precio</th>
+                <th class="text-dark">Descuento</th>
+              </tr>
+            </thead>
+             <tbody class="product_modal"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer" hidden>
+        <button class="btn btn-secondary close_list_product" type="button" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+{% endblock %}
+{% block script %}
+
+
+  <script>
+    preferens_columm = 0
+    $(document).ready(function(){
+      var list_product = null;
+      var obj = null;
+      var products = [];
+      var product = null
+      var exist_invoice = true
+
+      $(document).on('click',".delete",function(){
+        id = this.id
+        console.log(id)
+        console.log(products)
+        $(this).closest('tr').remove();
+        const indexToRemove = products.findIndex(product => product.code === id);
+        if (indexToRemove >= 0) {
+          products.splice(indexToRemove, 1);
+        }
+        console.log(products)
+        Clean()
+      })
+
+      function Clean(){
+        $('.quantity').val('')
+        $('.product_name').val('')
+        $('.product_name').focus()
+        $('.cost').val('')
+        $(".ipo").val('')
+        $(".price1").val('')
+        $(".price2").val('')
+        $(".price3").val('')
+        $(".price4").val('')
+        $(".price5").val('')
+        $(".price6").val('')
+        $(".ultra_processed").val('')
+        $('.quantity').prop("disabled", true);
+        $('.cost').prop("disabled", true);
+        $(".ipo").prop("disabled", true);
+        $(".price1").prop("disabled", true);
+        $(".price2").prop("disabled", true);
+        $(".price3").prop("disabled", true);
+        $(".price4").prop("disabled", true);
+        $(".price5").prop("disabled", true);
+        $(".price6").prop("disabled", true);
+        $(".ultra_processed").prop("disabled", true);
+      }
+
+      document.addEventListener('keydown', function(event) {
+        if (event.altKey && event.key.toLowerCase() === 'f') {
+          $(".register_shopping").click()
+        }
+        if (event.altKey && event.key.toLowerCase() === 'z') {
+          $(".list_supplier").focus()
+          $(".list_supplier").click()
+        }
+        if (event.altKey && event.key.toLowerCase() === 'x') {
+          $(".paymentform").focus()
+          $(".paymentform").click()
+        }
+        if (event.altKey && event.key.toLowerCase() === 'c') {
+          $(".list_product").focus()
+          $(".list_product").click()
+        }
+      })
+
+      $(".date_invoice").val(new Date().toISOString().split('T')[0]);
+      $(".date_invoice_due").val(new Date().toISOString().split('T')[0]);
+
+
+      $(".paymentform").change(function(){
+        const id = parseInt($(this).val());
+        $(".due_date").css('display', id === 2 ? 'block' : 'none');
+      })      
+
+      $(".list_supplier").change(function(){
+        $("#product_list_supplier").empty();
+        // $.ajax({
+        //   url: "{% url 'Get_List_Products_Supplier' %}",
+        //   data: {'pk_supplier': $(this).val()},
+        //   success: function(response){
+        //       console.log("Response:", response);
+        //       let list_product = JSON.parse(response);
+              
+        //       $("#product_list_supplier").empty(); // Asegúrate de limpiar antes de agregar nuevas opciones
+              
+        //       for(let i = 0; i < list_product.length; i++){
+        //           $("#product_list_supplier").append(`<option value="${list_product[i].code}">${list_product[i].name}</option>`);
+        //       }
+        //   },
+        //   error: function(xhr, status, error) {
+        //       console.log("Error:", error);
+        //   }
+        // });
+      });
+
+
+
+      $(document).on('keyup','.enter', function(e) {
+        const code = e.keyCode ? e.keyCode : e.which;
+        value_quantity = $('.quantity').val()
+        if(code == 13){
+          if(value_quantity !== ""){
+            product = products.filter(producto => producto.code === obj['code'])
+            if(product.length > 0){
+              UpdateExistingProduct(product[0],value_quantity)
+            }
+            else{
+              Add_Product_Table(value_quantity)
+            }
+            $(".quantity").val("")
+            $(".quantity").focus()
+          }
+          else{
+            noti_person('Error',"No puede agregar valores si la cantidad esta vacia")
+            $('.quantity').focus()
+          }
+        }
+      })
+
+      $(".product_name").keyup(function(e){
+        const value = parseInt($(this).val());
+        const code = e.keyCode ? e.keyCode : e.which;
+        if(code == 13){
+          obj = list_product.filter(product => product.code === $(this).val())[0]
+          if (obj !== undefined) {
+            console.log(obj)
+            console.log(obj['ultra_processed'])
+            $(".product_name").val(obj['name'])
+            $(".cost").val(obj['cost'])
+            $(".tax").val(obj['tax'])
+            $(".ipo").val(obj['ipo'])
+
+            $(".price1").val(obj['price_1'])
+            $(".price2").val(obj['price_2'])
+            $(".price3").val(obj['price_3'])
+            $(".price4").val(obj['price_4'])
+            $(".price5").val(obj['price_5'])
+            $(".price6").val(obj['price_6'])
+            $(".ultra_processed").val(obj['ultra_processed'])
+            $("._total_cost").val(obj['total_cost'])
+            $(".discount").val(0)
+
+
+            $('.quantity').prop("disabled", false);
+            $(".quantity").focus()
+            $('.cost').prop("disabled", false);
+            $(".ipo").prop("disabled", false);
+            $(".price1").prop("disabled", false);
+            $(".price2").prop("disabled", false);
+            $(".price3").prop("disabled", false);
+            $(".price4").prop("disabled", false);
+            $(".price5").prop("disabled", false);
+            $(".price6").prop("disabled", false);
+          }
+          else{
+            noti_person('Error', "Este producto no le pertenece a este proveedor")
+          }
+        }
+      })
+
+      function Headers(){
+        return JSON.stringify({
+          "number":$(".number_invoice").val(),
+          "date_registration":$(".date_invoice").val(),
+          "pk_supplier":$(".list_supplier").val(),
+          "pk_paymentform":$(".paymentform").val(),
+          "payment_due_date":$(".date_invoice_due").val()
+        }, null, 2)
+      }
+
+
+      $(".register_shopping").click(function(){
+        items = JSON.stringify(products, null, 2)
+        if(!exist_invoice){
+          $.ajax({
+            url:"{% url 'Save_Shopping' %}",
+            method: "POST",
+            data:{csrfmiddlewaretoken: '{{ csrf_token }}','items':items, 'headers':Headers()},
+            success: function(e){
+              e = JSON.parse(e)
+              console.log(e)
+              if(!e.result){
+                noti_person('ERROR', e.message)
+              }
+              else{
+               noti_person('Tarea Finalizada', "Factura de compra registrada con éxito")
+               location.reload(true) 
+              }
+            }
+          })
+        }
+        else{
+          $(".number_invoice").focus()
+          noti_person('ERROR', "Debe agregar un numero de factura de compra")
+        }
+      })
+
+
+      $(".number_invoice").keyup(function(){
+        $.ajax({
+          url:"{% url 'Verified_Invoice' %}",
+          data: {'number': $(this).val()},
+          success: function(e) {
+            e = JSON.parse(e)
+
+            if(!e.result){
+              exist_invoice = false
+            }
+            else{
+              noti_person('ERROR', "Este numero de factura ya fue registrado")
+              noti_person('ERROR', "Este numero de factura ya fue registrado")
+            }
+          }
+        })
+      })
+
+      $(document).on('keyup',".number_price",function(){
+        id = this.id
+        value_price = parseInt($(this).val())
+        value_cost = parseInt($(".cost").val())
+        if(value_price > value_cost){
+          price =((( value_price - value_cost ) / value_price) * 100).toFixed(1)
+          $(".percentage"+id).val(price+'%')
+        }
+        else{
+          $(".percentage"+id).val('0%') 
+        }
+      })
+
+      $(document).on('keyup',".cost",function(){
+        var index = 1;
+        for(index; index <= 4; index++){
+          id = index
+          price = 0
+          value_price = parseInt($(".price"+index).val())
+          value_cost = parseInt($(this).val())
+          if(value_price > value_cost){
+            price =((( value_price - value_cost ) / value_price) * 100).toFixed(1)
+            $(".percentage"+id).val(price+'%')
+          }
+          else{
+            $(".percentage"+id).val('0%') 
+          }
+        }
+        index = 1;
+      })
+
+
+      function UpdateExistingProduct(product, newQuantity) {
+        const existingRow = $(`.row_product td.${product.code}`).closest("tr");
+        if (existingRow.length > 0) {
+          const quantityCell = existingRow.find(".text-center");
+          total_quantity = newQuantity !== "" ? parseInt(newQuantity) + parseInt(quantityCell.text()) : quantityCell
+          quantityCell.text(total_quantity);
+          product.quantity = total_quantity
+
+          const costCell = existingRow.find(`.cost${product.code}`);
+          const ipoCell = existingRow.find(`.ipo${product.code}`);
+          const priceCell = existingRow.find(`.price${product.code}`);
+          const price2Cell = existingRow.find(`.price2${product.code}`);
+          const price3Cell = existingRow.find(`.price3${product.code}`);
+          const price4Cell = existingRow.find(`.discount${product.code}`);
+
+          costCell.text($('.cost').val())
+          ipoCell.text($(".ipo").val())
+          priceCell.text($(".price1").val())
+          price2Cell.text($(".price2").val())
+          price3Cell.text($(".price3").val())
+          price4Cell.text($(".discount").val())
+
+          product.cost = $('.cost').val()
+          product.ipo = $(".ipo").val()
+          product.price = $(".price1").val()
+          product.price2 = $(".price2").val()
+          product.price3 = $(".price3").val()
+          product.price4 = $(".discount").val()
+
+
+        }
+      }
+
+
+      function Add_Product_Table(newQuantity){
+        $(".row_product").append(`
+          <tr class="${obj['code']}" id="${obj['code']}">
+            <td class="${obj['code']}">${obj['name']}</td>
+            <td class="text-center">${newQuantity}</td>
+            <td class"cost${obj['code']}"> ${$('._total_cost').val()}</td>
+            <td class"price4${obj['code']}">${$('.discount').val()}</td>
+            <td class"price${obj['code']}">${$('.price1').val()}</td>
+            <td class"price2${obj['code']}">${$('.price2').val()}</td>
+            <td class"price3${obj['code']}">${$('.price3').val()}</td>
+            <td class"price3${obj['code']}">${parseInt($('._total_cost').val()) * newQuantity}</td>
+            <td class"text-center"><span class="fas fa-trash-alt delete" id="${obj['code']}"></span></td>
+          </tr>
+        `)
+
+        products.push({
+          'code': obj['code'],
+          'name': obj['name'],
+          'cost': $('.cost').val(),
+          'ipo': $(".ipo").val(),
+          'price_1': $(".price1").val(),
+          'price_2': $(".price2").val(),
+          'price_3': $(".price3").val(),
+          'discount': $(".discount").val(),
+          'quantity': $(".quantity").val(),
+          'total_cost': $("._total_cost").val(),
+          'tax': obj['tax']
+        })
+        return 0
+      }
+
+    })
+    
+  </script>
+
+
+  <script>
+    $(document).ready(function() {
+      //var products = [];
+      
+
+      // Manejar eventos de teclado en todo el documento
+      $(document).on('keydown', function(event) {
+          if (event.altKey && event.key.toLowerCase() === 'Escape') {
+            $('.product_name').focus();
+            $('.modal_list_product').modal('hide');
+          } else if (event.altKey && event.key.toLowerCase() === 'p') {
+            $(".product_name").val('');
+            $('.modal_list_product').click();
+          }
+      });
+
+      // Manejar eventos de teclado en el input de búsqueda
+      $(document).on('keydown', "input[type='search']", function(event) {
+          const table = document.querySelector("#example .product_modal");
+          const rows = table.querySelectorAll("tr");
+          let focusedRowIndex = 0;
+          if (event.key === "ArrowDown") {
+            focusedRowIndex = Math.min(focusedRowIndex + 1, rows.length - 1);
+            rows[1].focus();
+            event.preventDefault();
+          }
+      });
+
+      // Manejar eventos dentro del modal al mostrarse
+      $('#modal_list_product').on('shown.bs.modal', function () {
+            // Enfocar en el input de búsqueda y establecer un valor predeterminado
+            $("input[type='search']").focus().val("Hola bebe");
+            const table = document.querySelector("#example .product_modal");
+            const rows = table.querySelectorAll("tr");
+            let focusedRowIndex = 0;
+            $(table).keydown(function(event) {
+                if (event.key === "ArrowDown") {
+                    focusedRowIndex = Math.min(focusedRowIndex + 1, rows.length - 1);
+                    rows[focusedRowIndex].focus();
+                    event.preventDefault();
+                } else if (event.key === "ArrowUp") {
+                    focusedRowIndex = Math.max(focusedRowIndex - 1, 0);
+                    rows[focusedRowIndex].focus();
+                    event.preventDefault();
+                } else if (event.key === "Enter") {
+                    const firstCell = rows[focusedRowIndex].querySelector("th, td");
+                    $.ajax({
+                        url: "{% url 'Loading_Product' %}",
+                        data: {'code': firstCell.textContent},
+                        success: function (e) {
+                            const obj = JSON.parse(e);
+                            products.push(obj);
+                            $(".product_name").val(obj['name']);
+                            $("input[type='search']").val('');
+                        },
+                        error: function(xhr, status, error) {
+                            // Manejar errores de la solicitud AJAX
+                            console.error(xhr.responseText);
+                        }
+                    });
+                }
+            });
+
+            // Manejar eventos de teclado en el input de búsqueda dentro del modal
+            $("input[type='search']").keydown(function(event) {
+                if (event.key === "ArrowDown") {
+                    // Enfocar en la primera fila al presionar la flecha hacia abajo
+                    rows[0].focus();
+                }
+            });
+        });
+    });
+
+  </script>
+
+{% endblock %}

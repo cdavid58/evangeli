@@ -1,0 +1,88 @@
+{% extends '../base.html' %}
+{% load static %}
+{% block content %}
+
+<form enctype="multipart/form-data" class="update_inventory_excel">
+  <input type="file" class="data_inventory" accept=".xls, .xlsx" hidden>
+</form>
+
+
+<div class="card mb-3" data-date="{{ i.registration_date }}">
+  <div class="card-body p-2 overflow-hidden">
+    <div class="row">
+      <div class="col-md-3 mb-3 col-12">
+        <h4>Historial de movimiento - Inventario</h4>
+      </div>
+      <div class="col-md-2 col-12 ml-auto">  
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card" data-date="{{ i.registration_date }}">
+  <div class="card-body p-2 overflow-hidden">
+    <div class="table-responsive">
+      <table class="table" id="example" style="width:100%">
+        <thead>
+          <tr>
+            <th class="text-dark w-100 text-center fs-0">Información</th>
+            <th class="text-dark fs-0">Codigo</th>
+            <th class="text-dark fs-0">Producto</th>
+            <th class="text-dark">Fecha</th>
+            <th class="text-dark">Cant. Ant</th>
+            <th class="text-dark">precio_1. Ant</th>
+            <th class="text-dark">precio_2. Ant</th>
+            <th class="text-dark">precio_3. Ant</th>
+            <th class="text-dark">Cant. Ant</th>
+            <th class="text-dark">precio_1. Ant</th>
+            <th class="text-dark">precio_2. Ant</th>
+            <th class="text-dark">precio_3. Ant</th>
+            <th class="text-dark"></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for i in page_obj %}
+            <tr>
+              <td class="details text-center">Ver más de {{i.fields.product_name}}</td>
+              <td class="text-dark">{{i.product.fields.code}}</td>
+              <td class="text-dark">{{i.product.fields.name}}</td>
+              <td class="text-dark">{{i.product.fields.timestamp}}</td>
+              <td class="text-dark">{{i.modified_values.fields.quantity}}</td>
+              <td class="text-dark">{{i.modified_values.fields.price_1}}</td>
+              <td class="text-dark">{{i.modified_values.fields.price_2}}</td>
+              <td class="text-dark">{{i.modified_values.fields.price_3}}</td>
+              <td class="text-dark">{{i.product.fields.quantity}}</td>
+              <td class="text-dark">{{i.product.fields.price_1}}</td>
+              <td class="text-dark">{{i.product.fields.price_2}}</td>
+              <td class="text-dark">{{i.product.fields.price_3}}</td>
+              <td class="text-dark"></td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+{% block script %}
+
+  <script>
+    function format(data) {
+      return `
+          <div>Code Producto: ${data[1]}</div>
+          <div>Producto: ${data[2]}</div>
+          <div>Fecha: ${data[3]}</div>
+          <div>Vendidos: ${data[4]}</div>
+        `
+    }
+    preferens_columm = 5;
+    name_pdf = "Reporte de más vendidos"
+    name_excel = "Reporte de más vendidos"
+    btns_exist_user = true
+    // $(document).ready(function(){
+    //   $('input[type="search"]').addClass('search')
+    // })
+  </script>
+
+{% endblock %}

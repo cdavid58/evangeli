@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Factura Electronica</title>
+  <style>
+
+  </style>
+<body style='font-family:Tahoma;font-size:12px;color: #333333;background-color:#FFFFFF;'>
+  <table align='center' border='0' cellpadding='0' cellspacing='0' style='height:842px; width:100%;font-size:12px;'>
+    <tr>
+      <td valign='top'>
+        <table width='100%' cellspacing='0' cellpadding='0'>
+          <tr style="height: 30px;">
+            <td valign='bottom' width='30%' height='100'>
+              <div align='left'>
+                <img src='{{logo}}' height="100%" width="50%"  />
+              </div>
+              <br />
+            </td>
+            <td valign='top' width='20%' style='font-size:12px;'>
+              <strong>Cobrar a: </strong><br><br>
+              <strong>NIT / CC:</strong>&nbsp;{% if customer.identification_number %}{{customer.identification_number}}-{{customer.dv}}{% else %}N/A{% endif %}<br />
+              <strong>Razon Social:</strong>&nbsp;{% if customer.name %}{{customer.name}}{% else %}N/A{% endif %}<br />
+              <strong>Email:</strong>&nbsp;{% if customer.email %}{{customer.email}}{% else %}N/A{% endif %}<br />
+              <strong>Direccion:</strong>&nbsp;{% if customer.address %}{{customer.address}}{% else %}N/A{% endif %} <br/>
+              <strong>Tlf:</strong>&nbsp;{% if customer.phone %}{{customer.phone}}{% else %}N/A{% endif %}<br>
+            </td>
+            <td valign='top' width='20%'>
+            </td>
+            <td valign='top' width='30%' style='font-size:12px;'>
+              <strong>DATOS FACTURA</strong><br><br>
+              <strong>Fecha de Generacion:</strong> {{date}}<br/> 
+              <strong>Fecha de Vencimiento:</strong> {% if payment_form.payment_form == 1 %}{{date}}{% else %} {{duration_measure}}{% endif %} <br/> 
+              <strong>Forma de Pago:</strong> {% if payment_form.payment_method == 1 %}Efectivo{% elif payment_form.payment_method == 30 %}Credito{% else %}Otro{% endif %} <br/>
+              <strong>Dias de plazo:</strong>&nbsp;{% if payment_form.payment_method == 1 %}0{% elif payment_form.payment_method == 30 %}30{% else %}Otro{% endif %}<br>
+            </td>
+          </tr>
+        </table>
+        <!-- <table width='100%' cellspacing='0' cellpadding='0' style="top: 10px;">
+          <tr style="height: 10px;">
+          </tr>
+        </table> -->
+        <table width='100%' height='40' cellspacing='0' cellpadding='0'>
+          <tr>
+            <td>
+              <div align='center' style='font-size: 14px;font-weight: bold;'>{% if type_invoice == 1 %}Factura Electronica{% else %}Factura POS Electronico {% endif %}&nbsp; # {{prefix}} - {{number}} </div>
+            </td>
+          </tr>
+        </table>
+        {% if type_invoice == 1 or type_invoice == 15 %}
+          <table width='100%' height='40' cellspacing='0' cellpadding='0'>
+            <tr>
+              <td valign='top' width='35%' style='font-size:12px;'>
+                <div align='center' style='font-size: 14px;font-weight: bold;'>
+                  Cufe:<small>&nbsp;<a href="https://www.google.com" style="text-decoration: none;color: black;">{% if cufe %}{{cufe}}{% else %}Aun no sido enviada a la DIAN.{% endif %}</a></small>
+                </div>
+              </td>
+            </tr>
+          </table>
+        {% endif %}
+        <table width='100%' cellspacing='0' cellpadding='2' border='1' bordercolor='#CCCCCC'>
+          <tr>
+            <td width='35%' bordercolor='#ccc' bgcolor='#f2f2f2' style='font-size:12px;'><strong>Descripcion </strong></td>
+            <td bordercolor='#ccc' bgcolor='#f2f2f2' style='font-size:12px;'><strong>Cant.</strong></td>
+            <td bordercolor='#ccc' bgcolor='#f2f2f2' style='font-size:12px;'><strong>Precio Unit.</strong></td>
+            <td bordercolor='#ccc' bgcolor='#f2f2f2' style='font-size:12px;'><strong>IVA</strong></td>
+            <td bordercolor='#ccc' bgcolor='#f2f2f2' style='font-size:12px;'><strong>Valor IVA</strong></td>
+            <td bordercolor='#ccc' bgcolor='#f2f2f2' style='font-size:12px;'><strong>ICO</strong></td>
+            <td bordercolor='#ccc' bgcolor='#f2f2f2' style='font-size:12px;'><strong>Descuento</strong></td>
+            <td bordercolor='#ccc' bgcolor='#f2f2f2' style='font-size:12px;'><strong>Total IVA</strong></td>
+            <td bordercolor='#ccc' bgcolor='#f2f2f2' style='font-size:12px;'><strong>Subtotal Base</strong></td>
+          </tr>
+          <tr style="display:none;">
+            <td colspan="*">
+              {% for i in details %}
+                <tr>
+                  <td valign='top' style='font-size:12px;'>{{i.name}}</td>
+                  <td valign='top' style='font-size:12px;text-align: right;'><span id="price"></span>{{i.quantity}} </td>
+                  <td valign='top' style='font-size:12px;text-align: right;'><span id="price"></span>{{i.price}}</td>
+                  <td valign='top' style='font-size:12px;text-align: right;'><span></span>{{i.tax_value}}</td>
+                  <td valign='top' style='font-size:12px;text-align: right;'><span id="price"></span>{{i.tax}}</td>
+                  <td valign='top' style='font-size:12px;text-align: right;'><span id="price"></span>{{i.ipo}}</td>
+                  <td valign='top' style='font-size:12px;text-align: right;'><span></span>{{i.discount}}</td>
+                  <td valign='top' style='font-size:12px;text-align: right;'><span id="price"></span>{{i.total_tax}}</td>
+                  <td valign='top' style='font-size:12px;text-align: right;'><span id="price"></span>{{i.subtotals}}</td>
+                </tr>
+              {% endfor %}
+            </td>
+          </tr>
+        </table>
+        <table width='100%' cellspacing='0' cellpadding='2' border='0'>
+          <tr>
+            <td style='font-size:12px;width:50%;'>Total en cifra:<br><br><strong>{{total_letters}}&nbsp;PESOS</strong></td>
+            <td>
+              <table width='100%' cellspacing='0' cellpadding='2' border='0'>
+                <tr>
+                  <td align='right' style='font-size:12px;'>Subtotal</td>
+                  <td align='right' style='font-size:12px;'>$<span id="price">{{subtotals}}</span>
+                    <td>
+                </tr>
+                {% if tax_19 %}
+                  <tr>
+                    <td align='right' style='font-size:12px;'>IVA(19%)</td>
+                    <td align='right' style='font-size:12px;'>${{tax_19}}</td>
+                  </tr>
+                {% endif %}
+                {% if tax_5 %}
+                  <tr>
+                    <td align='right' style='font-size:12px;'>IVA(5%)</td>
+                    <td align='right' style='font-size:12px;'>${{tax_5}}</td>
+                  </tr>
+                {% endif %}
+                {% if tax_0 %}
+                  <tr>
+                    <td align='right' style='font-size:12px;'>IVA(0%)</td>
+                    <td align='right' style='font-size:12px;'>${{tax_0}}</td>
+                  </tr>
+                {% endif %}
+                <tr>
+                  <td align='right' style='font-size:12px;'>ICO</td>
+                  <td align='right' style='font-size:12px;'>${{ipo}}</td>
+                </tr>
+                <tr>
+                  <td align='right' style='font-size:12px;'>Descuento</td>
+                  <td align='right' style='font-size:12px;'>${{discount}}</td>
+                </tr>
+                <tr>
+                  <td align='right' style='font-size:12px;'><b>Total</b></td>
+                  <td align='right' style='font-size:12px;'><b>$<span id="price">{{totals}}</span></b></td>
+                </tr>
+              </table>
+              </td>
+          </tr>
+        </table>
+
+        <table width='100%' height='10'>
+          <tr>
+            <td style='font-size:12px;text-align:justify;'></td>
+          </tr>
+        </table>
+        <table width='100%' cellspacing='0' cellpadding='2'>
+          <tr>
+            <td width='33%' style='font-size:12px;' valign='top'><b>Observacion:</b><br/>
+              {{note}}
+            </td>
+          </tr>
+        </table>
+
+        <table width='100%' height='50'>
+          <tr>
+            <td style='font-size:12px;text-align:justify;'></td>
+          </tr>
+        </table>
+        <table width='100%' cellspacing='0' cellpadding='2'>
+          <tr>
+            <td width='30%' style='border-top:double medium #CCCCCC;font-size:12px;' valign='top'>
+              <b>
+                Factura emitida por:</br>
+                NIT: {{company.documentI}}<br>
+                Razon Social: {{branch.name}}</br>
+                Direccion: {{branch.address}}</br>
+                E-mail: {{branch.email}}</br>
+                Tlf: {{branch.phone}}</br>
+              </b>
+            </td>
+            <td valign='bottom' width='30%' height='100' style='border-top:double medium #CCCCCC;font-size:12px;' align='right'>
+              <div align='center'>
+                <img src='{{logo_qr}}' height="100%" width="50%"  />
+              </div>
+
+            </td>
+
+            <td valign='top' width='30%' style='border-top:double medium #CCCCCC;font-size:12px;' align='right'>
+              Resolucion: {% if resolution.resolution %}{{resolution.resolution}}{% else %} N/A{% endif %}<br/> 
+              Fecha desde {{resolution.date_from}} a {{resolution.date_to}} <br/>
+              {{state}}<br/>
+              Software Desarrollado por Evansoft Tlf: 3135293361<br>
+              Gracias por comprar con nosotros</br>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+  
+</body>
+</html>
