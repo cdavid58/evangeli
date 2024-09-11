@@ -12,11 +12,11 @@ URL_APPLICATION = "http://26.246.95.16:80"
 
 
 # URL_FILES_SERVER = f"C:/Users/{USER_WINDOWS}/Documents/Project/invoice/static/company/"
-URL_FILES_SERVER = f"C:/Users/Public/Videos/Nueva carpeta/invoice/static/company/"
+URL_FILES_SERVER = f"C:/Users/Public/Videos/Nueva carpeta (2)/evangeli/static/company/"
 # URL_FILES_SERVER = "/home/facturaevansoft/invoice_new_evansoft/static/company/"
 
 # URL_FILES_TEMPLATE = f"C:/Users/{USER_WINDOWS}/Documents/Project/invoice/template"
-URL_FILES_TEMPLATE = f"C:/Users/Public/Videos/Nueva carpeta/invoice/template"
+URL_FILES_TEMPLATE = f"C:/Users/Public/Videos/Nueva carpeta (2)/evangeli/template"
 # URL_FILES_TEMPLATE = "/home/facturaevansoft/invoice_new_evansoft/template"
 
 

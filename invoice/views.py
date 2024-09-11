@@ -124,6 +124,7 @@ def Print_Invoice(request,pk):
 	headers= {'Content-Type':'application/json'}
 	response = requests.request("GET", env.GET_INVOICE, headers=headers, data=payload)
 	data = json.loads(response.text)
+	data['time'] = str(data['time'])[:8]
 	subtotals = 0
 	tax = 0
 	ipo = 0
@@ -139,13 +140,14 @@ def Print_Invoice(request,pk):
 		"tax":Thousands_Separator(tax),
 		"ipo":Thousands_Separator(ipo),
 		"discount":Thousands_Separator(discount),
-		'totals': Thousands_Separator(subtotals + ipo + tax)
+		'totals': Thousands_Separator(subtotals + ipo + tax),
+		'totals_with_discount': Thousands_Separator((subtotals + ipo + tax) - discount)
 	}
 	page_invoice = 'Pos Electrónico'
 	if int(data['type_document']) == 2:
 		page_invoice = 'elect'
-	print(int(data['type_document']))
-	return render(request,f'invoice/pos.html',{
+	print(data)
+	return render(request,f'invoice/ticket.html',{
 		'invoice':data,
 		'details':data['details'],
 		'paymentmethodinvoice':data['payment_form'],

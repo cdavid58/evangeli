@@ -15,7 +15,7 @@ def GenerateQR(qr_data, number, pk):
     qr.add_data(data)
     qr.make(fit=True)
     img = qr.make_image(fill_color="black", back_color="white")
-    url_dir = f"C:/Users/{USER_WINDOWS}/Documents/Project/invoice/static/company/{pk}/{number}.png"
+    url_dir = f"{_env.URL_FILES_SERVER}{pk}/{number}.png"
     img.save(url_dir)
 
 
@@ -74,7 +74,7 @@ def Create_PDF_Invoice(data):
     data['ipo'] = Thousands_Separator(round(float(ipo)))
     data['total_letters'] = numero_a_letras(total).upper()
     data['type_invoice'] = int(data['type_document'])
-    data['logo_qr'] = 'http://26.246.95.16:80/static/company/65/'+str(data['number'])+".png"
+    data['logo_qr'] = f'{_env.URL_APPLICATION}/static/company/65/{str(data['number'])}.png'
     print(data)
     html = template.render(data)
     html_file_path = os.path.join(path, f"{name_doc}.html")

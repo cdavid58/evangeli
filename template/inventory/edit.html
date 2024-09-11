@@ -5,7 +5,7 @@
   <div class="card-body p-2 overflow-hidden">
     <div class="row">
       <div class="col-6">
-        <h5>Editar producto {{p.name}}</h5>
+        <h5>Editar producto " {{p.name}} "</h5>
       </div>
       <div class="col-3 ml-auto">
         <button class="btn btn-info list_product">
@@ -18,6 +18,7 @@
     </div>
   </div>
 </div>
+
 <form class="form_edit_product">
 	<div class="card mb-3">
 		<div class="card-body">
@@ -27,59 +28,102 @@
 					  <label class="form-label" for="exampleFormControlInput1">Código</label>
 					  <input class="form-control date_invoice" value="{{p.code}}" name="code" type="text" />
 					</div>
-					<div class="mb-3 col-md-3 col-12">
+					<div class="mb-3 col-md-5 col-12">
 					  <label class="form-label" for="exampleFormControlInput1">Producto</label>
-					  <input class="form-control date_invoice" value="{{p.name}}" name="name" autofocus type="text" />
-					</div>
-					<div class="mb-3 col-md-2 col-6">
-					  <label class="form-label" for="exampleFormControlInput1">Cantidad</label>
-					  <input class="form-control date_invoice text-right" value="{{p.quantity}}" name="quantity" type="number" />
-					</div>
-					<div class="mb-3 col-md-2 col-6">
-					  <label class="form-label" for="exampleFormControlInput1">Costo</label>
-					  <input class="form-control date_invoice cost text-right" value="{{p.cost}}" name="cost" type="number" />
+					  <input class="form-control date_invoice" name="name" value="{{p.name}}" type="text" />
 					</div>
 					<div class="mb-3 col-md-2 col-6">
 					  <label class="form-label" style="text-align: center;" for="exampleFormControlInput1">IVA</label>
 					  <select class="form-select text-right" size="1" name="tax">
 					  	<option value="{{p.tax}}">{{p.tax}}</option>
-					  	<option value="0">0</option>
-					  	<option value="5">5</option>
-					  	<option value="19">19</option>
+					  	{% for i in tax %}
+					  		{% if i != p.tax %}
+						  		<option value="{{i}}">{{i}}</option>
+					  		{% endif %}
+						  {% endfor %}
 					  </select>
+					</div>
+					<div class="mb-3 col-md-2 col-6">
+					  <label class="form-label" for="exampleFormControlInput1">Cantidad</label>
+					  <input class="form-control date_invoice text-right" value="{{p.quantity}}"  name="quantity" type="number" />
+					</div>
+					<div class="mb-3 col-md-2 col-6">
+					  <label class="form-label" for="exampleFormControlInput1">Paca/Bulto/Paquete</label>
+					  <input class="form-control date_invoice text-right" value="{{p.bale_quantity}}"  name="bale_quantity" type="number" />
+					</div>
+					<div class="mb-3 col-md-2 col-6">
+					  <label class="form-label" for="exampleFormControlInput1">Unidad</label>
+					  <input class="form-control date_invoice text-right" value="{{p.quantity_unit}}" name="quantity_unit" type="number" />
+					</div>
+					
+					<div class="mb-3 col-md-2 col-6">
+					  <label class="form-label" for="exampleFormControlInput1">Cantidad Static</label>
+					  <input class="form-control date_invoice text-right" value="{{p.quantity_unit}}" name="quantity_static" type="number" />
+					</div>
+					<div class="mb-3 col-md-2 col-6">
+					  <label class="form-label" for="exampleFormControlInput1">Paca Static</label>
+					  <input class="form-control date_invoice text-right" value="{{p.quantity_unit}}" name="bale_quantity_static" value="0" type="number" />
+					</div>
+					<div class="mb-3 col-md-2 col-6">
+					  <label class="form-label" for="exampleFormControlInput1">Unidad Static</label>
+					  <input class="form-control date_invoice text-right" value="{{p.quantity_unit}}" name="quantity_unit_static" value="0" type="number" />
 					</div>
 					<div class="mb-3 col-md-2 col-6">
 					  <label class="form-label" for="exampleFormControlInput1">IPO</label>
 					  <input class="form-control date_invoice text-right" value="{{p.ipo}}" name="ipo" type="number" />
 					</div>
 					<div class="mb-3 col-md-2 col-6">
-					  <label class="form-label" for="exampleFormControlInput1">Total Costo Und</label>
-					  <input class="form-control text-right" disabled value="{{p.total_cost}}" name="total_cost" type="number" />
+					  <label class="form-label" for="exampleFormControlInput1">Ultra Procesado</label>
+					  <input class="form-control date_invoice text-right" value="{{p.ultra_processed}}" name="ultra_processed" value="0" type="number" />
 					</div>
+
+
 					<div class="mb-3 col-md-2 col-6">
 					  <label class="form-label" for="exampleFormControlInput1">Descuento</label>
-					  <input class="form-control date_invoice text-right" value="{{p.discount}}" name="discount" value="0" type="number" />
+					  <input class="form-control date_invoice text-right" value="{{p.discount}}" name="discount" type="number" />
+					</div>
+					<div class="mb-3 col-md-2 col-6">
+					  <label class="form-label" for="exampleFormControlInput1">Costo</label>
+					  <input class="form-control date_invoice text-right" value="{{p.cost}}" name="cost" type="number" />
 					</div>
 					<div class="mb-3 col-md-2 col-6">
 					  <label class="form-label" for="exampleFormControlInput1">Precio 1</label>
-					  <input class="form-control date_invoice price text-right" id="1" value="{{p.price_1}}" name="price_1" type="number" />
+					  <input class="form-control date_invoice text-right" value="{{p.price_1}}" name="price_1" type="number" />
 					</div>
 					<div class="mb-3 col-md-2 col-6">
 					  <label class="form-label" for="exampleFormControlInput1">Precio 2</label>
-					  <input class="form-control date_invoice text-right price" id="2" value="{{p.price_2}}" name="price_2" type="number" />
+					  <input class="form-control date_invoice text-right" value="{{p.price_2}}" name="price_2" value="0" type="number" />
 					</div>
 					<div class="mb-3 col-md-2 col-6">
 					  <label class="form-label" for="exampleFormControlInput1">Precio 3</label>
-					  <input class="form-control date_invoice text-right price" id="3" value="{{p.price_3}}" name="price_3" value="0" type="number" />
+					  <input class="form-control date_invoice text-right" value="{{p.price_3}}" name="price_3" value="0" type="number" />
 					</div>
-					
+
+					<div class="mb-3 col-md-2 col-6">
+					  <label class="form-label" for="exampleFormControlInput1">Precio 4</label>
+					  <input class="form-control date_invoice text-right" value="{{p.price_4}}" name="price_4" type="number" />
+					</div>
+					<div class="mb-3 col-md-2 col-6">
+					  <label class="form-label" for="exampleFormControlInput1">Precio 5</label>
+					  <input class="form-control date_invoice text-right" value="{{p.price_5}}" name="price_5" value="0" type="number" />
+					</div>
+					<div class="mb-3 col-md-2 col-6">
+					  <label class="form-label" for="exampleFormControlInput1">Precio 6</label>
+					  <input class="form-control date_invoice text-right" value="{{p.price_6}}" name="price_6" value="0" type="number" />
+					</div>
+
+					<div class="mb-3 col-md-2 col-6">
+					  <label class="form-label" for="exampleFormControlInput1">% de Incremento</label>
+					  <input class="form-control date_invoice text-right" name="percentages" value="{{p.percentages}}" value="0" type="number" />
+					</div>
+
 					<div class="mb-3 col-md-3 col-12">
 					  <label class="form-label" style="text-align: center;" for="exampleFormControlInput1">Categoria</label>
-					  <select class="form-select cat" size="1">
-					  	<option value="{{p.pk_cat}}">{{p.category}}</option>
+					  <select class="form-select cat" size="1" name="client">
+					  	<option value="{{p.pk_category}}">{{p.name_category|title}}</option>
 					  	{% for i in cat %}
-					  		{% if i.pk_category != p.pk_cat %}
-					  			<option value="{{i.pk_category}}">{{i.name}}</option>
+					  		{% if i.pk_category != p.pk_category %}
+					  			<option value="{{i.pk_category}}">{{i.name|title}}</option>
 					  		{% endif %}
 					  	{% endfor %}
 					  </select>
@@ -87,33 +131,33 @@
 					<div class="mb-3 col-md-3 col-12">
 					  <label class="form-label" style="text-align: center;" for="exampleFormControlInput1">Subcategoria</label>
 					  <select class="form-select subc" size="1" name="pk_subcategory">
-					  	<option value="{{p.pk_subcategory}}">{{p.subcategory}}</option>
+					  	<option value="{{p.pk_subcategory}}">{{p.subcategory|title}}</option>
 					  	{% for i in p.list_subcategory %}
 					  		{% if i.pk_sub != p.pk_subcategory %}
-					  			<option value="{{i.pk_sub}}">{{i.name}}</option>
+					  			<option value="{{i.pk_sub}}">{{i.name|title}}</option>
 					  		{% endif %}
 					  	{% endfor %}
 					  </select>
+
 					</div>
 					<div class="mb-3 col-md-3 col-12">
 					  <label class="form-label" style="text-align: center;" for="exampleFormControlInput1">Proveedor</label>
 					  <select class="form-select" size="1" name="pk_supplier">
-					  	<option value="{{p.pk_supplier}}">{{p.supplier}}</option>
-					  	{% for i in list_supplier %}
-					  		{% if i.pk != p.pk_supplier %}
-					  			<option value="{{i.pk}}">{{i.name}}</option>
-					  		{% endif %}
+					  	{% for i in supplier %}
+					  		<option value="{{i.pk}}">{{i.name}}</option>
 					  	{% endfor %}
 					  </select>
 					</div>
-					<div class="row">
-						<h5 class="mb-3">Margen de utilidad</h5>
-						{% for i in p.calculate_profit_percentages %}
-							<div class="mb-3 col-md-2 col-6">
-							  <label class="form-label" for="exampleFormControlInput1">{{i.name}}</label>
-							  <input class="form-control date_invoice text-right percentage{{i.id}}" disabled value="{{i.percentage}}" type="text" />
-							</div>
-						{% endfor %}
+					<div class="mb-3 col-md-3 col-12">
+					  <label class="form-label" style="text-align: center;" for="exampleFormControlInput1">Unidad de Medida</label>
+					  <select class="form-select" size="1" name="unit_measures">
+					  	<option value="{{p.unit_measures}}">{{p.unit_measures_name}}</option>
+					  	{% for i in unit_measures %}
+					  		{% if i.id != p.unit_measures %}
+					  			<option value="{{i.id}}">{{i.name}}</option>
+					  		{% endif %}
+					  	{% endfor %}
+					  </select>
 					</div>
 				</div>
 				<div class="row p-1">
@@ -121,10 +165,12 @@
 						<input class="btn btn-primary edit_product" type="button" value="Actualizar Producto">
 					</div>
 				</div>
+				</div>
 			</div>
 		</div>
 	</div>
 </form>
+
 
 {% endblock %}
 {% block script %}
@@ -159,6 +205,7 @@
 
 	    $(".edit_product").click(function () {
 	      const form = $('.form_edit_product').serialize();
+	      console.log(form)
 	      $.ajax({
 	        data: form,
 	        success: function (e) {

@@ -1,0 +1,287 @@
+<table width="100%">
+    <tr>
+        <td style="width: 100%;" class="text-center vertical-align-top">
+            <div id="reference">
+                <p>DOCUMENTO EQUIVALENTE ELECTRONICO DEL TIQUETE DE MAQUINA REGISTRADORA CON SISTEMA P.O.S. No</p>
+                <p style="color: red;
+                    font-weight: bold;
+                    font-size: 8px;
+                    margin-bottom: 4px;">AB - 123456</p>
+                <p style="color: red;
+                    font-weight: bold;
+                    font-size: 8px;
+                    margin-bottom: 4px;">Fecha Emisión: 2024-09-09</p>
+                <p>Fecha Validación DIAN: 2024-09-09<br>
+                    Hora Validación DIAN: 12:34:56</p>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td style="width: 100%; padding: 0 1rem;" class="text-center vertical-align-top">
+            <div id="empresa-header">
+                <strong>Nombre de la Empresa</strong><br>
+                <strong>Establecimiento Secundario</strong><br>
+            </div>
+            <div id="empresa-header1">
+                <p style="font-size: 6px">NIT: 900123456-7 - Régimen Común - IVA Responsable - Obligación: Declarar y Pagar</p>
+                <p style="font-size: 6px">Tipo Documento ID: Cédula de Ciudadanía</p><br>
+                <p style="font-size: 6px">TARIFA ICA: 10%</p>
+                <p style="font-size: 6px">ACTIVIDAD ECONOMICA: Comercio al por mayor</p><br>
+                <p style="font-size: 6px">Regimen SEZE Año: 2019 Constitución Sociedad Año: 2020</p><br>
+                <p style="font-size: 6px">Resolución de Facturación Electrónica No. 12345 de 2023-09-01, Prefijo: AB, Rango 1000 Al 9999 - Vigencia Desde: 2023-09-01 Hasta: 2024-09-01</p>
+                <p style="font-size: 6px">REPRESENTACION GRAFICA DE DOCUMENTO EQUIVALENTE ELECTRONICO DEL TIQUETE DE MAQUINA REGISTRADORA CON SISTEMA P.O.S.</p>
+                <p style="font-size: 6px">Carrera 7 No. 123 -</p>
+                <p style="font-size: 6px">Bogotá - Cundinamarca - Colombia</p>
+                <p style="font-size: 6px">Teléfono - 1234567890</p>
+                <p style="font-size: 6px">E-mail: info@empresa.com</p>
+                <p style="font-size: 6px">FAVOR ABSTENERSE DE PRACTICAR RETENCION EN LA FUENTE REGIMEN ESPECIAL DECRETO 2112 DE 2019</p>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td style="width: 80%; text-align: center;" class="vertical-align-top">
+            <img  style="width: 136px; height: auto;" src="ruta/logo.png" alt="logo">
+        </td>
+    </tr>
+</table>
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>FACTURA ELECTRONICA Nro: FFET - 54821</title>
+</head>
+
+<body style="margin-top:50px">
+    <table style="font-size: 10px">
+        <tr>
+            <td class="vertical-align-top" style="width: 40%;">
+                <table>
+                    <tr>
+                        <td>CC o NIT:</td>
+                        <td>1231313213 </td>
+                    </tr>
+                    <tr>
+                        <td>Cliente:</td>
+                        <td>qqewqeqweqwe</td>
+                    </tr>
+                    <tr>
+                        <td>Régimen:</td>
+                        <td>qweqeqe</td>
+                    </tr>
+                    <tr>
+                        <td>Dirección:</td>
+                        <td>qweqeqeqeqe</td>
+                    </tr>
+                    <tr>
+                        <td>Ciudad:</td>
+                        <td>Medellin</td>
+                    </tr>
+                    <tr>
+                        <td>Teléfono:</td>
+                        <td>{{$customer->company->phone}}</td>
+                    </tr>
+                    <tr>
+                        <td>Email:</td>
+                        <td>{{$customer->email}}</td>
+                    </tr>
+                </table>
+            </td>
+            <td class="vertical-align-top" style="width: 40%; padding-left: 1rem">
+                <table>
+                    <tr>
+                        <td>Forma de Pago:</td>
+                        <td>{{$paymentForm->name}}</td>
+                    </tr>
+                    <tr>
+                        <td>Medio de Pago:</td>
+                        <td>{{$paymentForm->nameMethod}}</td>
+                    </tr>
+                    <tr>
+                        <td>Plazo Para Pagar:</td>
+                        <td>{{$paymentForm->duration_measure}} Dias</td>
+                    </tr>
+                    <tr>
+                        <td>Fecha Vencimiento:</td>
+                        <td>{{$paymentForm->payment_due_date}}</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td class="horizontal-align-center" style="width: 100%; text-align: center">
+                <img style="width: 100px;" src="{{$imageQr}}">
+            </td>
+        </tr>
+    </table>
+    <br>
+    <table class="table" style="width: 100%;">
+        <thead>
+            <tr>
+                <th class="text-center" style="width: 100%;">INFORMACION REFERENCIAL SECTOR SALUD</th>
+            </tr>
+        </thead>
+    </table>
+    <table class="table" style="width: 100%;font-size: 8px">
+        <thead>
+            <tr>
+                <th class="text-center">#</th>
+                <th class="text-center">Código</th>
+                <th class="text-center">Descripción</th>
+                <th class="text-center">Cant</th>
+                <th class="text-center">Val. Unit</th>
+                <th class="text-center">IVA/IC</th>
+                <th class="text-center">Dcto</th>
+                <th class="text-center">Val. Item</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td class="text-right">asdadasdsdad</td>
+                <td>RON</td>
+                <td class="text-right">30</td>
+                <td class="text-right">25552.00</td>
+                <td class="text-right">0</td>
+                <td class="text-right">0</td>
+                <td class="text-right">315351</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <br>
+
+    <table class="table" style="width: 100%">
+        <thead>
+            <tr>
+                <th class="text-center">Impuestos</th>
+                <th class="text-center">Retenciones</th>
+                <th class="text-center">Totales</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td style="width: 40%;">
+                    <table class="table" style="width: 100%">
+                        <thead>
+                            <tr>
+                                <th class="text-center">Tipo</th>
+                                <th class="text-center">Base</th>
+                                <th class="text-center">Porcentaje</th>
+                                <th class="text-center">Valor</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>IVA</td>
+                                <td class="text-right">5000</td>
+                                <td class="text-right">19%</td>
+                                <td class="text-right">5000</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+                <td style="width: 30%;">
+                    <table class="table" style="width: 100%">
+                        <thead>
+                            <tr>
+                                <th class="text-center">Tipo</th>
+                                <th class="text-center">Base</th>
+                                <th class="text-center">Porcentaje</th>
+                                <th class="text-center">Valor</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>IVA</td>
+                                <td class="text-right">5000</td>
+                                <td class="text-right">19%</td>
+                                <td class="text-right">5000</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+                <td style="width: 30%;">
+                    <table class="table" style="width: 100%">
+                        <thead>
+                            <tr>
+                                <th class="text-center">Concepto</th>
+                                <th class="text-center">Valor</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Nro Lineas:</td>
+                                <td class="text-right">1</td>
+                            </tr>
+                            <tr>
+                                <td>Base:</td>
+                                <td class="text-right">123213</td>
+                            </tr>
+                            <tr>
+                                <td>Impuestos:</td>
+                                <td class="text-right">123123</td>
+                            </tr>
+                            <tr>
+                                <td>Retenciones:</td>
+                                <td class="text-right">12313</td>
+                            </tr>
+                            <tr>
+                                <td>Descuentos En Lineas:</td>
+                                <td class="text-right">123123123</td>
+                            </tr>
+                            <tr>
+                                <td>Descuentos Globales:</td>
+                                <td class="text-right">12313123</td>
+                            </tr>
+                            <tr>
+                                <td>Saldo Anterior:</td>
+                                <td class="text-right">1231313</td>
+                            </tr>
+                            <tr>
+                                <td>Total Factura - Descuentos:</td>
+                                <td class="text-right">123213213213213</td>
+                            </tr>
+                            <tr>
+                                <td>Total Factura:</td>
+                                <td class="text-right">123123213213</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <br>
+    <div class="summarys">
+        <div class="text-word" id="note">
+            <p><strong>NOTAS:</strong></p>
+            <p style="font-style: italic; font-size: 5px">NO HAY NOTA</p>
+            <br>
+            <p> <strong>SON</strong>: Cuatrocientos M/CTE*********.</p>
+        </div>
+    </div>
+
+    <div class="summary" >
+        <div class="text-word" id="note">
+            <p style="font-style: italic;">INFORME EL PAGO AL TELEFONO 1231231 o al e-mail EMAIL@EMNAIL.COM<br>
+               <br>
+                <div id="firma">
+                    <p><strong>FIRMA ACEPTACIÓN:</strong></p><br>
+                    <p><strong>CC:</strong></p><br>
+                    <p><strong>FECHA:</strong></p><br>
+                </div>
+            </p>
+        </div>
+    </div>
+</body>
+</html>
+
+
+
+<footer id="footer">
+    <hr style="margin-bottom: 2px;">
+    <p id='mi-texto' style="font-size: 10px">Factura No: FFET - 12312313 - Fecha y Hora de Generación: 2024-09-09 - 20:08</p>
+    <p style="font-size: 10px">CUDE:12312312312312312313123</p>
+    <p id='mi-texto-1' style="font-size: 10px">Factura electronica</p>
+</footer>

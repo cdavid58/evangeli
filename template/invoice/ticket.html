@@ -1,0 +1,266 @@
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+
+<style>
+
+    @media print {
+        #footer {
+            page-break-inside: avoid;
+            margin-top: 10px;
+        }
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        font-family: Roboto, sans-serif;
+    }
+
+    html, body {
+        width: 100%;
+        vertical-align: baseline;
+    }
+
+    body {
+        line-height: 1;
+        font-size: 12px;
+    }
+
+    #container {
+        width: 95%;
+        margin: 0px;
+        padding: 1px;
+        text-align: center !important;
+    }
+
+    #header {
+        text-align: center;
+    }
+
+    #header > #reference p {
+        margin: 2px 0;
+        font-size: 15px;
+    }
+
+    .table {
+        width: 100%;
+        font-size: 10px;
+        border-collapse: collapse;
+    }
+
+    .table th, .table td {
+        border: 1px solid #ccc;
+        padding: 3px;
+        text-align: left;
+    }
+
+    .table th {
+        font-weight: bold;
+    }
+
+    .table td {
+        text-align: right;
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+    .vertical-align-top {
+        vertical-align: top;
+    }
+
+    .text-right {
+        text-align: right !important;
+    }
+
+    #empresa-header {
+        text-align: center;
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    #empresa-header1 {
+        text-align: center;
+        font-size: 10px;
+    }
+
+    .table tr:nth-child(odd) td {
+        background-color: rgb(248, 249, 250);
+    }
+</style>
+<body>
+    <div id="container">
+        <div id="header">
+            <div id="reference">
+                <p>DOCUMENTO EQUIVALENTE ELECTRONICO DEL TIQUETE DE MAQUINA REGISTRADORA CON SISTEMA P.O.S.</p>
+                <p style="font-weight: bold;">Fecha Emisión: {{invoice.date}}</p>
+                <p>Fecha Validación DIAN: {{invoice.date}}<br>Hora Validación DIAN: {{invoice.time}}</p>
+            </div>
+        </div>
+
+        <div id="empresa-header">
+            {{invoice.company.name}}
+        </div>
+        <div id="empresa-header1">
+            <p style="font-size: 14px">NIT: {{invoice.company.documentI}} - 
+                {% if invoice.company.type_regime == 1 %}
+                    Responsable de IVA - Obligación: Declarar y Pagar
+                {% else %}
+                    No Responsable de IVA
+                {% endif %}</p>
+            <p style="font-size: 14px">Tipo Documento ID: Cédula de Ciudadanía</p>
+            <p style="font-size: 14px">Resolución de Facturación Electrónica No. {{invoice.resolution.resolution}} de {{invoice.resolution.resolution_date}}, <br>Prefijo: {{invoice.resolution.prefix}}, Rango 1 Al {{invoice.resolution.to}} - Vigencia Desde: {{invoice.resolution.date_from}} Hasta: {{invoice.resolution.date_to}}</p>
+            <!-- <p style="font-size: 14px">REPRESENTACION GRAFICA DE DOCUMENTO EQUIVALENTE ELECTRONICO CON SISTEMA P.O.S.</p> -->
+            <p style="font-size: 14px">{{invoice.branch.address}} -</p>
+            <p style="font-size: 14px">{{invoice.branch.municipalities_branch}} - Colombia</p>
+            <p style="font-size: 14px">Teléfono - {{invoice.branch.phone}}</p>
+            <p style="font-size: 14px">E-mail: {{invoice.branch.email}}</p><br>
+            <img  style="width: 86px; height: auto;" src="https://upload.wikimedia.org/wikipedia/commons/d/d7/Commons_QR_code.png" alt="QR">
+        </div><br>
+
+
+        <table class="table">
+            <tr>
+                <td style="text-align: left; font-size: 10px;">CC o NIT: {{invoice.customer.identification_number}}</td>
+                <td style="text-align: left; font-size: 10px;">Forma de Pago:
+                    {% if invoice.payment_form.payment_form == 1 %}
+                        Contado
+                    {% else %}
+                        Crédito
+                    {% endif %}
+
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: left; font-size: 10px;">Cliente: {{invoice.customer.name}}</td>
+                <td style="text-align: left; font-size: 10px;">Medio de Pago: {{invoice.payment_form.name_payment_method}}  </td>
+            </tr>
+            <tr>
+                <td style="text-align: left; font-size: 10px;">Dirección: 
+                    {% if invoice.customer.identification_number == 222222222222 %}
+                        {{invoice.branch.address}}
+                    {% else %}
+                        {{invoice.customer.address}}
+                    {% endif %}
+                </td>
+                <td style="text-align: left; font-size: 10px;">Plazo Para Pagar: 0 Días</td>
+            </tr>
+            <tr>
+                <td style="text-align: left; font-size: 10px;">Teléfono: 
+                    {% if invoice.customer.identification_number == 222222222222 %}
+                        {{invoice.branch.phone}}
+                    {% else %}
+                        {{invoice.customer.phone}}
+                    {% endif %}
+                </td>
+                <td style="text-align: left; font-size: 10px;">Fecha Vencimiento: {{invoice.payment_form.payment_due_date}}</td>
+            </tr>
+        </table>
+        <br>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th class="text-center w-80">Descripción</th>
+                    <th class="text-center">Cant</th>
+                    <th class="text-center">Val. Unit</th>
+                    <th class="text-center">Val. IVA</th>
+                    <th class="text-center">IC</th>
+                    <th class="text-center">Dcto</th>
+                    <th class="text-center">Val. Item</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in details %}
+                    <tr>
+                        <td style="text-align: left;">{{i.name}}</td>
+                        <td class="text-right">{{i.quantity}}</td>
+                        <td class="text-right">{{i.cost}}</td>
+                        <td class="text-right">{{i.tax}}</td>
+                        <td class="text-right">{{i.ipo}}</td>
+                        <td class="text-right">{{i.discount}}</td>
+                        <td class="text-right">{{i.subtotals}}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <br>
+        <div class="container-fluid">
+            <div class="row">
+                <div style="width:100%;">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th class="text-center" style="text-align: center !important;">Impuestos</th>
+                                <th class="text-center" style="text-align: center !important;">Totales</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="width: 50%;vertical-align: top;">
+                                    <table class="table" style="width: 100%">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center">Tipo</th>
+                                                <th class="text-center">Base</th>
+                                                <th class="text-center">Porcentaje</th>
+                                                <th class="text-center">Valor</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>IVA</td>
+                                                <td class="text-right">5000</td>
+                                                <td class="text-right">19%</td>
+                                                <td class="text-right">5000</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                                <td style="width: 50%;">
+                                    <table class="table" style="width: 100%">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center">Tipo</th>
+                                                <th class="text-center">Base</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Base:</td>
+                                                <td class="text-right">{{totals.subtotals}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Impuestos:</td>
+                                                <td class="text-right">{{totals.tax}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>IPOC:</td>
+                                                <td class="text-right">{{totals.ipo}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Descuentos:</td>
+                                                <td class="text-right">{{totals.discount}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Total Factura:</td>
+                                                <td class="text-right">{{totals.totals_with_discount}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div id="footer">
+            <hr style="margin-bottom: 2px;">
+            <p id='mi-texto' style="font-size: 11px; text-align:center;">Factura No: FFET - 12312313 - Fecha y Hora de Generación: 2024-09-09 - 20:08</p>
+            <p style="font-size: 10px; text-align:center;">CUDE: 12345678901234567890123456789012345678901234567890</p>
+            <p id='mi-texto-1' style="font-size: 11px; text-align:center;">Factura electronica generada por Evansoft</p>
+        </div>
+    </div>
+</body>

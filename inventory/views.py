@@ -48,10 +48,16 @@ def Delete_Product(request):
 
 
 def Edit_Product(request, code):
+	p = Inventory(request).Get_Product(code)
+	print(p)
+	tax = [0,5,19]
 	if request.is_ajax():
 		return HttpResponse(Inventory(request).Update_Product(request))
-	return render(request,'inventory/edit.html',{'p':Inventory(request).Get_Product(code), 
+	return render(request,'inventory/edit.html',{'p':p, 
 					'cat': Inventory(request).Get_Category(),
+					'supplier':Supplier(request).List_Supplier(),
+					"tax":tax,
+					'unit_measures': Setting(request).Get_All_Unit_Measures(),
 					'supplier':Supplier(request).List_Supplier()
 				})
 
