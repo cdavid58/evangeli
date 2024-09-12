@@ -89,6 +89,7 @@
         background-color: rgb(248, 249, 250);
     }
 </style>
+
 <body>
     <div id="container">
         <div id="header">
@@ -100,7 +101,8 @@
         </div>
 
         <div id="empresa-header">
-            {{invoice.company.name}}
+            {{invoice.company.name}}<br>
+            {{invoice.branch.name}}
         </div>
         <div id="empresa-header1">
             <p style="font-size: 14px">NIT: {{invoice.company.documentI}} - 
@@ -111,11 +113,11 @@
                 {% endif %}</p>
             <p style="font-size: 14px">Tipo Documento ID: Cédula de Ciudadanía</p>
             <p style="font-size: 14px">Resolución de Facturación Electrónica No. {{invoice.resolution.resolution}} de {{invoice.resolution.resolution_date}}, <br>Prefijo: {{invoice.resolution.prefix}}, Rango 1 Al {{invoice.resolution.to}} - Vigencia Desde: {{invoice.resolution.date_from}} Hasta: {{invoice.resolution.date_to}}</p>
-            <!-- <p style="font-size: 14px">REPRESENTACION GRAFICA DE DOCUMENTO EQUIVALENTE ELECTRONICO CON SISTEMA P.O.S.</p> -->
             <p style="font-size: 14px">{{invoice.branch.address}} -</p>
             <p style="font-size: 14px">{{invoice.branch.municipalities_branch}} - Colombia</p>
             <p style="font-size: 14px">Teléfono - {{invoice.branch.phone}}</p>
             <p style="font-size: 14px">E-mail: {{invoice.branch.email}}</p><br>
+            <p style="font-size: 14px; font-weight: bold;">FACTURA DE VENTA: {{invoice.resolution.prefix}} - {{invoice.number}}</p><br>
             <img  style="width: 86px; height: auto;" src="https://upload.wikimedia.org/wikipedia/commons/d/d7/Commons_QR_code.png" alt="QR">
         </div><br>
 
@@ -175,11 +177,11 @@
                     <tr>
                         <td style="text-align: left;">{{i.name}}</td>
                         <td class="text-right">{{i.quantity}}</td>
-                        <td class="text-right">{{i.cost}}</td>
-                        <td class="text-right">{{i.tax}}</td>
-                        <td class="text-right">{{i.ipo}}</td>
-                        <td class="text-right">{{i.discount}}</td>
-                        <td class="text-right">{{i.subtotals}}</td>
+                        <td class="text-right">{{i.cost|floatformat:0}}</td>
+                        <td class="text-right">{{i.tax|floatformat:0}}</td>
+                        <td class="text-right">{{i.ipo|floatformat:0}}</td>
+                        <td class="text-right">{{i.discount|floatformat:0}}</td>
+                        <td class="text-right">{{i.subtotals|floatformat:0}}</td>
                     </tr>
                 {% endfor %}
             </tbody>
@@ -208,12 +210,14 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>IVA</td>
-                                                <td class="text-right">5000</td>
-                                                <td class="text-right">19%</td>
-                                                <td class="text-right">5000</td>
-                                            </tr>
+                                            {% for i in invoice.list_taxes %}
+                                                <tr>
+                                                    <td>{{i.name}}</td>
+                                                    <td class="text-right">{{i.taxable_amount}}</td>
+                                                    <td class="text-right">{{i.percent}}%</td>
+                                                    <td class="text-right">{{i.tax_amount}}</td>
+                                                </tr>
+                                            {% endfor %}
                                         </tbody>
                                     </table>
                                 </td>
@@ -228,23 +232,27 @@
                                         <tbody>
                                             <tr>
                                                 <td>Base:</td>
-                                                <td class="text-right">{{totals.subtotals}}</td>
+                                                <td class="text-right">{{totals.subtotals|floatformat:0}}</td>
                                             </tr>
                                             <tr>
                                                 <td>Impuestos:</td>
-                                                <td class="text-right">{{totals.tax}}</td>
+                                                <td class="text-right">{{totals.tax|floatformat:0}}</td>
                                             </tr>
                                             <tr>
                                                 <td>IPOC:</td>
-                                                <td class="text-right">{{totals.ipo}}</td>
+                                                <td class="text-right">{{totals.ipo|floatformat:0}}</td>
                                             </tr>
                                             <tr>
-                                                <td>Descuentos:</td>
-                                                <td class="text-right">{{totals.discount}}</td>
+                                                <td>Descuentos Linea:</td>
+                                                <td class="text-right">{{totals.discount|floatformat:0}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Descuentos Global:</td>
+                                                <td class="text-right">0</td>
                                             </tr>
                                             <tr>
                                                 <td>Total Factura:</td>
-                                                <td class="text-right">{{totals.totals_with_discount}}</td>
+                                                <td class="text-right">{{totals.totals_with_discount|floatformat:0}}</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -256,10 +264,25 @@
             </div>
         </div>
         <br>
+        <div>
+            <p style="font-size: 11px; text-align:left;">
+               <strong> Nota: </strong><br>{{invoice.note}}
+            </p>
+        </div>
+        <br>
+        <div>
+            <p style="font-size: 11px; text-align:center;">
+                <strong>Importante:</strong><br>Debido a las regulaciones vigentes y
+                políticas internas de la empresa, no se aceptan 
+                cambios ni devoluciones de ningún tipo de licor.
+                Agradecemos su comprensión y colaboración
+                en este asunto.
+            </p>
+        </div>
         <div id="footer">
             <hr style="margin-bottom: 2px;">
             <p id='mi-texto' style="font-size: 11px; text-align:center;">Factura No: FFET - 12312313 - Fecha y Hora de Generación: 2024-09-09 - 20:08</p>
-            <p style="font-size: 10px; text-align:center;">CUDE: 12345678901234567890123456789012345678901234567890</p>
+            <p style="font-size: 10px; text-align:center;">CUDE: fee8lX7t7lJIFd1A8NRcenosIo2xXkfDIj31hDL9YMNPJxGTPFEOlq74afrXmXbPRcN4ClS5U8tn55S28zC3YkJB9k </p>
             <p id='mi-texto-1' style="font-size: 11px; text-align:center;">Factura electronica generada por Evansoft</p>
         </div>
     </div>
