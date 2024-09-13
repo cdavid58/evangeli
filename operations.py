@@ -425,6 +425,7 @@ class Report:
 																											'date_start':self.request.GET['date_start'], 
 																											'date_end':self.request.GET['date_end']
 																										}))
+		print(response.text)
 		return json.loads(response.text)
 
 	def Report_Invoice_Annulled(self, type_document):

@@ -500,6 +500,7 @@
             data:{'date_start': $(".date_from").val(), 'date_end': $(".date_to").val() },
             success: function(e){
               e = JSON.parse(e)
+              console.log(e)
               if(e.result){
                 noti_person("El reporte se descargo",'Tarea Finalizada')
                 $("#downloadLink").attr("href", e.path_file);

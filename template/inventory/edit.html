@@ -34,7 +34,7 @@
 					</div>
 					<div class="mb-3 col-md-2 col-6">
 					  <label class="form-label" style="text-align: center;" for="exampleFormControlInput1">IVA</label>
-					  <select class="form-select text-right" size="1" name="tax">
+					  <select class="form-select text-right _tax" size="1" name="tax">
 					  	<option value="{{p.tax}}">{{p.tax}}</option>
 					  	{% for i in tax %}
 					  		{% if i != p.tax %}
@@ -84,32 +84,32 @@
 					</div>
 					<div class="mb-3 col-md-2 col-6">
 					  <label class="form-label" for="exampleFormControlInput1">Costo</label>
-					  <input class="form-control date_invoice text-right" value="{{p.cost}}" name="cost" type="number" />
+					  <input class="form-control date_invoice text-right price" value="{{p.cost}}" name="cost" type="number" />
 					</div>
 					<div class="mb-3 col-md-2 col-6">
 					  <label class="form-label" for="exampleFormControlInput1">Precio 1</label>
-					  <input class="form-control date_invoice text-right" value="{{p.price_1}}" name="price_1" type="number" />
+					  <input class="form-control date_invoice text-right price" id="1"  value="{{p.price_1}}" name="price_1" type="number" />
 					</div>
 					<div class="mb-3 col-md-2 col-6">
 					  <label class="form-label" for="exampleFormControlInput1">Precio 2</label>
-					  <input class="form-control date_invoice text-right" value="{{p.price_2}}" name="price_2" value="0" type="number" />
+					  <input class="form-control date_invoice text-right price" id="2"  value="{{p.price_2}}" name="price_2" value="0" type="number" />
 					</div>
 					<div class="mb-3 col-md-2 col-6">
 					  <label class="form-label" for="exampleFormControlInput1">Precio 3</label>
-					  <input class="form-control date_invoice text-right" value="{{p.price_3}}" name="price_3" value="0" type="number" />
+					  <input class="form-control date_invoice text-right price" id="3"  value="{{p.price_3}}" name="price_3" value="0" type="number" />
 					</div>
 
 					<div class="mb-3 col-md-2 col-6">
 					  <label class="form-label" for="exampleFormControlInput1">Precio 4</label>
-					  <input class="form-control date_invoice text-right" value="{{p.price_4}}" name="price_4" type="number" />
+					  <input class="form-control date_invoice text-right price" id="4"  value="{{p.price_4}}" name="price_4" type="number" />
 					</div>
 					<div class="mb-3 col-md-2 col-6">
 					  <label class="form-label" for="exampleFormControlInput1">Precio 5</label>
-					  <input class="form-control date_invoice text-right" value="{{p.price_5}}" name="price_5" value="0" type="number" />
+					  <input class="form-control date_invoice text-right price" id="5"  value="{{p.price_5}}" name="price_5" value="0" type="number" />
 					</div>
 					<div class="mb-3 col-md-2 col-6">
 					  <label class="form-label" for="exampleFormControlInput1">Precio 6</label>
-					  <input class="form-control date_invoice text-right" value="{{p.price_6}}" name="price_6" value="0" type="number" />
+					  <input class="form-control date_invoice text-right price" id="6"  value="{{p.price_6}}" name="price_6" value="0" type="number" />
 					</div>
 
 					<div class="mb-3 col-md-2 col-6">
@@ -159,6 +159,15 @@
 					  	{% endfor %}
 					  </select>
 					</div>
+					<div class="row">
+						<h5 class="mb-3">Margen de utilidad</h5>
+						{% for i in p.calculate_profit_percentages %}
+							<div class="mb-3 col-md-2 col-6">
+							  <label class="form-label" for="exampleFormControlInput1">{{i.name}}</label>
+							  <input class="form-control date_invoice text-right percentage{{i.id}}" disabled value="{{i.percentage}}" type="text" />
+							</div>
+						{% endfor %}
+					</div>
 				</div>
 				<div class="row p-1">
 					<div class="mb-3">
@@ -178,7 +187,7 @@
 	<script>
 		preferens_columm  = 0
 	  $(document).ready(function () {
-	  	console.clear()
+	  	// console.clear()
 	    $(".cat").change(function () {
 	      const id = $(this).val();
 	      $.ajax({
@@ -212,7 +221,6 @@
 	          e = JSON.parse(e)
 	          if (e.result) {
 	            noti_person("Tarea Finalizada", 'Producto actualizado con éxito')
-	            $.notify("Producto actualizado con éxito", 'success');
 	          } 
 	          else {
 	          	noti_person("ERROR", e.message)
@@ -227,13 +235,18 @@
 
 	    $(document).on('keyup',".price",function(){
 	    	id = this.id
-	    	value_price = parseInt($(this).val())
-	    	value_cost = parseInt($(".cost").val())
+	    	value_tax = parseInt($("._tax").val())
+	    	value_price = Math.round(parseInt($(this).val()) / (1 + (value_tax / 100)),1)
+	    	value_cost = Math.round(parseFloat($(".cost").val()),1)
+	    	console.log(value_price)
+	    	console.log(value_cost)
 	    	if(value_price >= value_cost){
+	    		console.log("success")
 		    	price = ((( value_price - value_cost ) / value_price) * 100).toFixed(1)
 		    	$(".percentage"+id).val(price+'%')
 		    }
 		    else{
+		    	console.log("ERROR")
 		    	$(".percentage"+id).val('0%')	
 		    }
 	    })

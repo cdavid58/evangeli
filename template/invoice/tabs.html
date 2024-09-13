@@ -555,6 +555,7 @@
       	url: "{% url 'Return_Product_UNIQUE' %}",
       	data:{'pk_employee':"{{pk_employee}}", "pk_product": id,'quantity':_quantity }
       })
+      clearStorage()
       CalculateTotalsInvoice();
       saveTableData();
 		})
@@ -948,14 +949,14 @@
         	console.log(parseFloat($(celdas[6]).text()))
         	discount += parseFloat($(celdas[6]).text()) * _quantity
 	      }
-      	$(".subtotal_{{tab_id}}").text(subtotal_row_table_invoice.toFixed(2))
-	      $(".ico_{{tab_id}}").text(impoconsumo.toFixed(2))
-	      $('.impuestos_{{tab_id}}').text(impuestos.toFixed(2))
+      	$(".subtotal_{{tab_id}}").text(subtotal_row_table_invoice.toFixed(0))
+	      $(".ico_{{tab_id}}").text(impoconsumo.toFixed(0))
+	      $('.impuestos_{{tab_id}}').text(impuestos.toFixed(0))
 	      $('.descuento_{{tab_id}}').text(discount)
 	      let total = impoconsumo + subtotal_row_table_invoice + impuestos
-	      $(".total_invoice_{{tab_id}}").text(total.toFixed(2))
+	      $(".total_invoice_{{tab_id}}").text(total.toFixed(0))
 	      $(".quantity_{{tab_id}}").val('')
-	      $(".total_product_{{tab_id}}").val(total.toFixed(2));
+	      $(".total_product_{{tab_id}}").val(total.toFixed(0));
 	      $('.product_name_{{tab_id}}').val('')
 	      $('.product_name_{{tab_id}}').focus()
 	      $(".price_{{tab_id}}").val('1')
@@ -1003,12 +1004,12 @@
 			            <td class="${_product.code}">${_product.code}</td>
 			            <td>${_product.name}</td>
 			            <td class="text-center">${quantity}</td>
-			            <td>${base_g.toFixed(2)}</td>
-			            <td>${tax_grabable.toFixed(2)}</td>
-			            <td>${discount.toFixed(2)}</td>
+			            <td>${base_g.toFixed(0)}</td>
+			            <td>${tax_grabable.toFixed(0)}</td>
+			            <td>${discount.toFixed(0)}</td>
 			            <td>${_product['ipo']}</td>
-			            <td>${subtotal.toFixed(2)}</td>
-			            <td>${totalValue.toFixed(2)}</td>
+			            <td>${subtotal.toFixed(0)}</td>
+			            <td>${totalValue.toFixed(0)}</td>
 			            <td class"text-center"><span class="fas fa-trash-alt delete_product_row{{tab_id}}" id="${_product.code}"></span></td>
 			        </tr>
 			    `);
@@ -1283,6 +1284,7 @@
 		}
 
 		function clearStorage() {
+			console.log('invoiceData_{{tab_id}}')
 		  localStorage.removeItem('invoiceData_{{tab_id}}');
 		}
 

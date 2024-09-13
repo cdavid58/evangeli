@@ -85,7 +85,6 @@ def crear_reporte_caja(nombre_archivo, encabezado, etiquetas, valores_1, valores
         y_data -= 20
         x_data = 165
     c.save()
-    print("Creado")
 
 def PDF(date_start, date_end,data, path, name_branch):
     result = False
@@ -125,9 +124,9 @@ def PDF(date_start, date_end,data, path, name_branch):
         )
         result = True
         message = "Success"
-        partes = nombre_archivo.partition("invoice_new_evansoft")
-        nombre_archivo = f"{env.URL_APPLICATION}{partes[2]}"
+        partes = nombre_archivo.partition("evangeli")
+        nombre_archivo_ = f"{env.URL_APPLICATION}{partes[2]}"
     except Exception as e:
         message = str(e)
 
-    return json.dumps({'result':result, 'message':message,'path_file':nombre_archivo})
+    return json.dumps({'result':result, 'message':message,'path_file':nombre_archivo_})
