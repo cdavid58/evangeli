@@ -1081,7 +1081,7 @@
 
 		function Save_Invoice() {
 		    $('#question_money_client_{{tab_id}}').modal('hide');
-		    $(".loader_{{tab_id}}").click()
+		    // $(".loader_{{tab_id}}").click()
 		    $.ajax({
 		        url: "{% url 'Save_Invoice' %}",
 		        method: "POST",
