@@ -4,7 +4,11 @@ from django.core.paginator import Paginator
 from django.http import HttpResponse, FileResponse
 from django.shortcuts import render
 from jinja2 import Environment, FileSystemLoader
-import os, json, requests, env, make_pdf
+import os, json, requests, env, make_pdf, base64, io, smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.mime.base import MIMEBase
+from email import encoders
 
 
 def cargar_tabs(request):
@@ -124,7 +128,7 @@ def Print_Invoice(request,pk):
 	headers= {'Content-Type':'application/json'}
 	response = requests.request("GET", env.GET_INVOICE, headers=headers, data=payload)
 	data = json.loads(response.text)
-	data['time'] = str(data['time'])[:8]
+	data['time'] = str(data['time'])[:5]
 	subtotals = 0
 	tax = 0
 	ipo = 0
@@ -147,6 +151,8 @@ def Print_Invoice(request,pk):
 	if int(data['type_document']) == 2:
 		page_invoice = 'elect'
 	print(data)
+	make_pdf.GenerateQR(data['QRStr'], data['number'],data['resolution']['branch'])
+	qr = f'{env.URL_APPLICATION}/static/company/{data['customer']['branch']}/{str(data['number'])}.png'
 	return render(request,f'invoice/ticket.html',{
 		'invoice':data,
 		'details':data['details'],
@@ -156,9 +162,94 @@ def Print_Invoice(request,pk):
 		'company':data['branch'],
 		'number':data['resolution']['_from'],
 		'type_document':int(data['type_document']),
+		'qr': qr
 	})
 
 def Annulled_Invoice_By_Product(request):
 	if request.is_ajax():
 		invoice = Invoice(request).Annulled_Invoice_By_Product()
 		return HttpResponse(invoice)
+
+def base64_to_pdf(base64_string, xml,pdf,atd,request):
+	result = False
+	try:
+		_path = f'{env.URL_FILES_SERVER}{request.session['pk_branch']}/{pdf}'
+		pdf_bytes = base64.b64decode(base64_string)
+		with open(_path, "wb") as pdf_file:
+			pdf_file.write(pdf_bytes)
+
+		_path = f'{env.URL_FILES_SERVER}{request.session['pk_branch']}/{atd}'
+		pdf_bytes = base64.b64decode(xml)
+		with open(_path, "wb") as pdf_file:
+			pdf_file.write(pdf_bytes)
+		result = True
+	except Exception as e:
+		print(e)
+	return result
+
+
+def enviar_email(data):
+    # Configuración del servidor y las credenciales
+    smtp_server = "smtp.gmail.com"
+    smtp_port = 587
+    email_usuario = f"{data['branch']['email']}"  # Cambia a tu correo
+    email_contraseña = f"{data['branch']['psswd']}"  # La contraseña de aplicación de Gmail
+
+    # Dirección de origen y de destino
+    email_origen = f"{data['branch']['email']}"
+    email_destino = f"{data['customer']['email']}" if int(data['customer']['identification_number']) != 222222222222 else f"{data['branch']['email']}"
+
+    # Crear el mensaje
+    mensaje = MIMEMultipart()
+    mensaje['From'] = email_origen
+    mensaje['To'] = email_destino
+    mensaje['Subject'] = "Asunto del correo"
+
+    # Cuerpo del correo
+    cuerpo = "Este es el cuerpo del correo electrónico enviado desde Python."
+    mensaje.attach(MIMEText(cuerpo, 'plain'))
+
+    # Si quieres adjuntar un archivo (opcional)
+    # archivo_adjunto = "ruta/al/archivo.txt"  # Especifica la ruta del archivo
+    # adjunto = open(archivo_adjunto, "rb")
+
+    # mime_base = MIMEBase('application', 'octet-stream')
+    # mime_base.set_payload((adjunto).read())
+    # encoders.encode_base64(mime_base)
+    # mime_base.add_header('Content-Disposition', f"attachment; filename= {archivo_adjunto}")
+    # mensaje.attach(mime_base)
+
+    try:
+        # Conectar al servidor SMTP
+        servidor = smtplib.SMTP(smtp_server, smtp_port)
+        servidor.starttls()  # Iniciar la conexión TLS (encriptada)
+
+        # Iniciar sesión en el servidor SMTP
+        servidor.login(email_usuario, email_contraseña)
+
+        # Convertir el mensaje a string y enviarlo
+        texto = mensaje.as_string()
+        servidor.sendmail(email_origen, email_destino, texto)
+
+        print("Correo enviado exitosamente")
+    except Exception as e:
+        print(f"Error al enviar el correo: {e}")
+    finally:
+        servidor.quit()
+
+
+def Send_Email_DIAN(request):
+	if request.is_ajax():
+		invoice = Invoice(request).Get_Invoice(request.GET['pk_invoice'])
+		values = {
+			"nit":invoice['company']['documentI'],
+			"number":invoice['number'],
+			"prefix": invoice['prefix'],
+			"attach_document": invoice['attacheddocument'],
+			"pdf": invoice['urlinvoicepdf'],
+			"token": invoice['company']['token']
+		}
+		data = Invoice(request).pdf_to_base64(values)
+		base64_to_pdf(data['pdf'],data['attach_document'],invoice['urlinvoicepdf'],invoice['attacheddocument'],request)
+		enviar_email(invoice)
+		return HttpResponse("")

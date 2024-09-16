@@ -118,7 +118,7 @@
             <p style="font-size: 14px">Teléfono - {{invoice.branch.phone}}</p>
             <p style="font-size: 14px">E-mail: {{invoice.branch.email}}</p><br>
             <p style="font-size: 14px; font-weight: bold;">FACTURA DE VENTA: {{invoice.resolution.prefix}} - {{invoice.number}}</p><br>
-            <img  style="width: 86px; height: auto;" src="https://upload.wikimedia.org/wikipedia/commons/d/d7/Commons_QR_code.png" alt="QR">
+            <img  style="width: 86px; height: auto;" src="{{qr}}" alt="QR">
         </div><br>
 
 
@@ -281,8 +281,8 @@
         </div>
         <div id="footer">
             <hr style="margin-bottom: 2px;">
-            <p id='mi-texto' style="font-size: 11px; text-align:center;">Factura No: FFET - 12312313 - Fecha y Hora de Generación: 2024-09-09 - 20:08</p>
-            <p style="font-size: 10px; text-align:center;">CUDE: fee8lX7t7lJIFd1A8NRcenosIo2xXkfDIj31hDL9YMNPJxGTPFEOlq74afrXmXbPRcN4ClS5U8tn55S28zC3YkJB9k </p>
+            <p id='mi-texto' style="font-size: 11px; text-align:center;">Factura No: {{invoice.prefix}} - {{invoice.number}} <br> Fecha y Hora de Generación: {{invoice.date}} - {{invoice.time}}</p>
+            <p style="font-size: 10px; text-align:center;">CUFE: {{invoice.cufe}}</p>
             <p id='mi-texto-1' style="font-size: 11px; text-align:center;">Factura electronica generada por Evansoft</p>
         </div>
     </div>

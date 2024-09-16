@@ -67,3 +67,17 @@ def Details_Email(request, pk):
 	}
 	Email(request).Mark_As_Read(data)
 	return render(request,'email/email-detail.html',{'email': Email(request).Get_Email(pk)})
+
+
+
+
+
+
+
+
+
+
+
+
+
+

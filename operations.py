@@ -284,9 +284,7 @@ class Invoice:
 		return json.dumps(totals_prices)
 
 	def Create_Invoice(self, data):
-		print(data)
 		response = requests.request("POST", env.CREATE_INVOICE, headers= self.headers, data=json.dumps(data))
-		print(response.text)
 		return json.dumps(json.loads(response.text))
 
 	def Annulled_Invoice_By_Product(self):
@@ -296,6 +294,35 @@ class Invoice:
 	def Create_Pass_Invoice(self):
 		response = requests.request("POST", env.CREATE_PASS_INVOICE, headers=self.headers, data= json.dumps(self.request.GET))
 		return json.dumps(json.loads(response.text))
+
+	def pdf_to_base64(self,data):
+		payload = json.dumps({
+		  "nit": data['nit'],
+		  "pdf": data['pdf'],
+		  "attach_document": data['attach_document']
+		})
+		response = requests.request("POST", env.PDF_TO_BASE64, headers=self.headers, data=payload)
+		pdf = json.loads(response.text)
+		return pdf
+		payload = json.dumps({
+		  "prefix": data['prefix'],
+		  "number": str(data['number']),
+		  "showacceptrejectbuttons": True,
+		  "email_cc_list": [
+		    {
+		      "email": "contabilidadtheriosoft@gmail.com"
+		    }
+		  ],
+		  "base64graphicrepresentation": pdf['pdf']
+		})
+		headers = {
+		  'Content-Type': 'application/json',
+		  'accept': 'application/json',
+		  'Authorization':  f'Bearer {data["token"]}'
+		}
+		print(headers)
+		response = requests.request("POST", "http://theriosoft.com:8080/api/ubl2.1/send-email", headers = headers, data=payload)
+		# (response.text)
 
 class Setting:
 	def __init__(self,request):

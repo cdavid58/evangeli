@@ -8,7 +8,7 @@
         <h5 class="mb-2 mb-md-0">N° # {{data.number}}</h5>
       </div>
       <div class="col-auto">
-        <a href="{% url 'GetPDF' data.pk_invoice %}" target="_blank" class="btn btn-falcon-default btn-sm me-1 mb-2 mb-sm-0" type="button" id="downloadPdfButton">
+        <a href="https://catalogo-vpfe.dian.gov.co/document/searchqr?documentkey={{data.cufe}}" target="_blank" class="btn btn-falcon-default btn-sm me-1 mb-2 mb-sm-0" type="button" id="downloadPdfButton">
           <span class="fas fa-arrow-down me-1"> </span>PDF DIAN
         </a>
         <a href="{% url 'GetPDF' data.pk_invoice %}" target="_blank" class="btn btn-falcon-default btn-sm me-1 mb-2 mb-sm-0" type="button" id="downloadPdfButton">

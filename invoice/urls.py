@@ -16,5 +16,6 @@ urlpatterns=[
 	url(r'^Validated_Quantity/$',Validated_Quantity,name="Validated_Quantity"),
 	url(r'^Annulled_Invoice_By_Product/$',Annulled_Invoice_By_Product,name="Annulled_Invoice_By_Product"),
 	url(r'^cargar_tabs/$',cargar_tabs,name="cargar_tabs"),
+	url(r'^Send_Email_DIAN/$',Send_Email_DIAN,name="Send_Email_DIAN"),
 	url(r'^GetPDF/(\d+)/$',GetPDF,name="GetPDF"),
 ]
