@@ -4,7 +4,7 @@ from django.core.paginator import Paginator
 from django.http import HttpResponse, FileResponse
 from django.shortcuts import render
 from jinja2 import Environment, FileSystemLoader
-import os, json, requests, env, make_pdf, base64, io, smtplib
+import os, json, requests, env, make_pdf, base64, io, smtplib, zipfile
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
@@ -187,69 +187,91 @@ def base64_to_pdf(base64_string, xml,pdf,atd,request):
 		print(e)
 	return result
 
+def comprimir_archivos(files, file_zip):
+	with zipfile.ZipFile(file_zip, 'w') as zipf:
+	    for file in files:
+	        if os.path.isfile(file):
+	            zipf.write(file, os.path.basename(file))
+	            print(f'{file} added to zip.')
+	        else:
+	            print(f'{file} does not exist.')
 
-def enviar_email(data):
-    # Configuración del servidor y las credenciales
+def enviar_email(request,data):
+
     smtp_server = "smtp.gmail.com"
     smtp_port = 587
-    email_usuario = f"{data['branch']['email']}"  # Cambia a tu correo
-    email_contraseña = f"{data['branch']['psswd']}"  # La contraseña de aplicación de Gmail
+    
+    user_email = f"{data['branch']['email']}"
+    email_password = f"{data['branch']['psswd']}" #"gfedpdgntwuriugq"
 
-    # Dirección de origen y de destino
-    email_origen = f"{data['branch']['email']}"
-    email_destino = f"{data['customer']['email']}" if int(data['customer']['identification_number']) != 222222222222 else f"{data['branch']['email']}"
+    email_origin = f"{data['branch']['email']}"
+    emails = []
+    customer = data.get('customer', {})
+    emails_to_add = [customer.get('email'), customer.get('email_optional')]
+    emails.extend(email for email in emails_to_add if email)
+
+    destination_email = emails
 
     # Crear el mensaje
-    mensaje = MIMEMultipart()
-    mensaje['From'] = email_origen
-    mensaje['To'] = email_destino
-    mensaje['Subject'] = "Asunto del correo"
+    message = MIMEMultipart()
+    message['From'] = email_origin
+    message['To'] = destination_email
+    message['Subject'] = f"{data['company']['documentI']};{data['company']['name']};{data['resolution']['prefix']};{data['number']};01;{data['company']['name']}"
 
-    # Cuerpo del correo
-    cuerpo = "Este es el cuerpo del correo electrónico enviado desde Python."
-    mensaje.attach(MIMEText(cuerpo, 'plain'))
+    _body = env.HTML_EMAIL
+    _body = _body.replace("$(client_name)",data['customer']['name'])
+    _body = _body.replace("$(logo)",str(data['company']['logo']))
+    _body = _body.replace("$(invoice_number)",str(data['number']))
+    _body = _body.replace("$(pk_company)",str(request.session['pk_branch']))
+    _body = _body.replace("$(nit_company)",str(data['company']['documentI']))
+    _body = _body.replace("$(nit_customer)",str(data['customer']['identification_number']))
+    _body = _body.replace("$(type_document)","factura electrónica de venta" if int(data['type_document']) == 1 else "nota crédito" )
+    message.attach(MIMEText(_body, 'html'))
+    _path = f"{env.URL_FILES_SERVER}{request.session['pk_branch']}"
+    files = [
+    	f"{_path}/{data['urlinvoicepdf']}", 
+    	f"{_path}/{data['attacheddocument']}"
+    ]
+    _zip = f"{_path}/compressed_files.zip"
+    comprimir_archivos(files,_zip)
+    attach = open(_zip, "rb")
 
-    # Si quieres adjuntar un archivo (opcional)
-    # archivo_adjunto = "ruta/al/archivo.txt"  # Especifica la ruta del archivo
-    # adjunto = open(archivo_adjunto, "rb")
-
-    # mime_base = MIMEBase('application', 'octet-stream')
-    # mime_base.set_payload((adjunto).read())
-    # encoders.encode_base64(mime_base)
-    # mime_base.add_header('Content-Disposition', f"attachment; filename= {archivo_adjunto}")
-    # mensaje.attach(mime_base)
-
+    mime_base = MIMEBase('application', 'octet-stream')
+    mime_base.set_payload((attach).read())
+    encoders.encode_base64(mime_base)
+    mime_base.add_header('Content-Disposition', f"attachment; filename= {"Factura DIAN.zip"}")
+    message.attach(mime_base)
+    _message = None
+    result = False
     try:
-        # Conectar al servidor SMTP
         servidor = smtplib.SMTP(smtp_server, smtp_port)
-        servidor.starttls()  # Iniciar la conexión TLS (encriptada)
-
-        # Iniciar sesión en el servidor SMTP
-        servidor.login(email_usuario, email_contraseña)
-
-        # Convertir el mensaje a string y enviarlo
-        texto = mensaje.as_string()
-        servidor.sendmail(email_origen, email_destino, texto)
-
-        print("Correo enviado exitosamente")
+        servidor.starttls()
+        servidor.login(user_email, email_password)
+        text = message.as_string()
+        servidor.sendmail(email_origin, destination_email, text)
+        _message = "Email sent successfully"
+        result = True
     except Exception as e:
-        print(f"Error al enviar el correo: {e}")
+        print(f"Error sending email: {e}")
+        _message = str(e)
     finally:
         servidor.quit()
+    return {'result': result, 'message':_message}
 
 
 def Send_Email_DIAN(request):
 	if request.is_ajax():
 		invoice = Invoice(request).Get_Invoice(request.GET['pk_invoice'])
-		values = {
-			"nit":invoice['company']['documentI'],
-			"number":invoice['number'],
-			"prefix": invoice['prefix'],
-			"attach_document": invoice['attacheddocument'],
-			"pdf": invoice['urlinvoicepdf'],
-			"token": invoice['company']['token']
-		}
-		data = Invoice(request).pdf_to_base64(values)
-		base64_to_pdf(data['pdf'],data['attach_document'],invoice['urlinvoicepdf'],invoice['attacheddocument'],request)
-		enviar_email(invoice)
-		return HttpResponse("")
+		if int(invoice['customer']['documentI']) != 222222222222:
+			values = {
+				"nit":invoice['company']['documentI'],
+				"number":invoice['number'],
+				"prefix": invoice['prefix'],
+				"attach_document": invoice['attacheddocument'],
+				"pdf": invoice['urlinvoicepdf'],
+				"token": invoice['company']['token']
+			}
+			data = Invoice(request).pdf_to_base64(values)
+			base64_to_pdf(data['pdf'],data['attach_document'],invoice['urlinvoicepdf'],invoice['attacheddocument'],request)
+			return HttpResponse(json.dumps(enviar_email(request,invoice)))
+		return HttpResponse({'result':False,'message':"No se puede emitir factura a "})
