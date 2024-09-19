@@ -134,11 +134,11 @@ def Print_Invoice(request,pk):
 	ipo = 0
 	discount = 0
 	for i in data['details']:
-		quantity = float(i['quantity'])
+		quantity = round(float(i['quantity']))
 		subtotals += round(float(i['subtotals']))
-		tax += float(i['tax']) * quantity
-		ipo += float(i['ipo']) * quantity
-		discount += float(i['discount']) * quantity
+		tax += round(float(i['tax']) * quantity)
+		ipo += round(float(i['ipo']) * quantity)
+		discount += round(float(i['discount']) * quantity)
 	totals = {
 		"subtotals":Thousands_Separator(subtotals),
 		"tax":Thousands_Separator(tax),
@@ -150,9 +150,8 @@ def Print_Invoice(request,pk):
 	page_invoice = 'Pos Electrónico'
 	if int(data['type_document']) == 2:
 		page_invoice = 'elect'
-	print(data)
 	make_pdf.GenerateQR(data['QRStr'], data['number'],data['resolution']['branch'])
-	qr = f'{env.URL_APPLICATION}/static/company/{data['customer']['branch']}/{str(data['number'])}.png'
+	qr = f'{env.URL_APPLICATION}/static/company/{data["customer"]["branch"]}/{str(data['number'])}.png'
 	return render(request,f'invoice/ticket.html',{
 		'invoice':data,
 		'details':data['details'],

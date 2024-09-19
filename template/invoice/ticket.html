@@ -44,7 +44,7 @@
 
     .table {
         width: 100%;
-        font-size: 10px;
+        font-size: 12px;
         border-collapse: collapse;
     }
 
@@ -94,7 +94,8 @@
     <div id="container">
         <div id="header">
             <div id="reference">
-                <p>DOCUMENTO EQUIVALENTE ELECTRONICO DEL TIQUETE DE MAQUINA REGISTRADORA CON SISTEMA P.O.S.</p>
+                <!-- <p>DOCUMENTO EQUIVALENTE ELECTRONICO DEL TIQUETE DE MAQUINA REGISTRADORA CON SISTEMA P.O.S.</p> -->
+                <p>DOCUMENTO EQUIVALENTE ELECTRONICO DEL SISTEMA P.O.S.</p>
                 <p style="font-weight: bold;">Fecha Emisión: {{invoice.date}}</p>
                 <p>Fecha Validación DIAN: {{invoice.date}}<br>Hora Validación DIAN: {{invoice.time}}</p>
             </div>
@@ -102,7 +103,7 @@
 
         <div id="empresa-header">
             {{invoice.company.name}}<br>
-            {{invoice.branch.name}}
+            Sucursal - {{invoice.branch.name}}
         </div>
         <div id="empresa-header1">
             <p style="font-size: 14px">NIT: {{invoice.company.documentI}} - 
@@ -118,6 +119,10 @@
             <p style="font-size: 14px">Teléfono - {{invoice.branch.phone}}</p>
             <p style="font-size: 14px">E-mail: {{invoice.branch.email}}</p><br>
             <p style="font-size: 14px; font-weight: bold;">FACTURA DE VENTA: {{invoice.resolution.prefix}} - {{invoice.number}}</p><br>
+            {% if invoice.annulled %}
+                <p style="font-size: 14px; font-weight: bold;">ESTE DOCUMENTO FUE ANULADO</p>
+                <p style="font-size: 14px; font-weight: bold;">NOTA CREDITO APLICADA</p><br>
+            {% endif %}
             <img  style="width: 86px; height: auto;" src="{{qr}}" alt="QR">
         </div><br>
 
@@ -205,7 +210,7 @@
                                             <tr>
                                                 <th class="text-center">Tipo</th>
                                                 <th class="text-center">Base</th>
-                                                <th class="text-center">Porcentaje</th>
+                                                <th class="text-center">%</th>
                                                 <th class="text-center">Valor</th>
                                             </tr>
                                         </thead>
@@ -232,19 +237,19 @@
                                         <tbody>
                                             <tr>
                                                 <td>Base:</td>
-                                                <td class="text-right">{{totals.subtotals|floatformat:0}}</td>
+                                                <td class="text-right">{{totals.subtotals}}</td>
                                             </tr>
                                             <tr>
                                                 <td>Impuestos:</td>
-                                                <td class="text-right">{{totals.tax|floatformat:0}}</td>
+                                                <td class="text-right">{{totals.tax}}</td>
                                             </tr>
                                             <tr>
                                                 <td>IPOC:</td>
-                                                <td class="text-right">{{totals.ipo|floatformat:0}}</td>
+                                                <td class="text-right">{{totals.ipo}}</td>
                                             </tr>
                                             <tr>
                                                 <td>Descuentos Linea:</td>
-                                                <td class="text-right">{{totals.discount|floatformat:0}}</td>
+                                                <td class="text-right">{{totals.discount}}</td>
                                             </tr>
                                             <tr>
                                                 <td>Descuentos Global:</td>
@@ -252,7 +257,7 @@
                                             </tr>
                                             <tr>
                                                 <td>Total Factura:</td>
-                                                <td class="text-right">{{totals.totals_with_discount|floatformat:0}}</td>
+                                                <td class="text-right">{{totals.totals_with_discount}}</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -265,13 +270,13 @@
         </div>
         <br>
         <div>
-            <p style="font-size: 11px; text-align:left;">
+            <p style="font-size: 12px; text-align:left;">
                <strong> Nota: </strong><br>{{invoice.note}}
             </p>
         </div>
         <br>
         <div>
-            <p style="font-size: 11px; text-align:center;">
+            <p style="font-size: 12px; text-align:center;">
                 <strong>Importante:</strong><br>Debido a las regulaciones vigentes y
                 políticas internas de la empresa, no se aceptan 
                 cambios ni devoluciones de ningún tipo de licor.
@@ -281,9 +286,9 @@
         </div>
         <div id="footer">
             <hr style="margin-bottom: 2px;">
-            <p id='mi-texto' style="font-size: 11px; text-align:center;">Factura No: {{invoice.prefix}} - {{invoice.number}} <br> Fecha y Hora de Generación: {{invoice.date}} - {{invoice.time}}</p>
+            <p id='mi-texto' style="font-size: 12px; text-align:center;">Factura No: {{invoice.prefix}} - {{invoice.number}} <br> Fecha y Hora de Generación: {{invoice.date}} - {{invoice.time}}</p>
             <p style="font-size: 10px; text-align:center;">CUFE: {{invoice.cufe}}</p>
-            <p id='mi-texto-1' style="font-size: 11px; text-align:center;">Factura electronica generada por Evansoft</p>
+            <p id='mi-texto-1' style="font-size: 12px; text-align:center;">Factura electronica generada por Evansoft</p>
         </div>
     </div>
 </body>
