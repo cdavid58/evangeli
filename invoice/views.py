@@ -201,15 +201,9 @@ def enviar_email(request,data):
     smtp_port = 587
     
     user_email = f"{data['branch']['email']}"
-    email_password = f"{data['branch']['psswd']}" #"gfedpdgntwuriugq"
-
+    email_password = f"{data['branch']['psswd']}"
     email_origin = f"{data['branch']['email']}"
-    emails = []
-    customer = data.get('customer', {})
-    emails_to_add = [customer.get('email'), customer.get('email_optional')]
-    emails.extend(email for email in emails_to_add if email)
-
-    destination_email = emails
+    destination_email = f"{data['customer']['email']}" if int(data['customer']['identification_number']) != 222222222222 else user_email
 
     # Crear el mensaje
     message = MIMEMultipart()
@@ -261,7 +255,7 @@ def enviar_email(request,data):
 def Send_Email_DIAN(request):
 	if request.is_ajax():
 		invoice = Invoice(request).Get_Invoice(request.GET['pk_invoice'])
-		if int(invoice['customer']['documentI']) != 222222222222:
+		if int(invoice['customer']['identification_number']) != 222222222222:
 			values = {
 				"nit":invoice['company']['documentI'],
 				"number":invoice['number'],
@@ -273,4 +267,4 @@ def Send_Email_DIAN(request):
 			data = Invoice(request).pdf_to_base64(values)
 			base64_to_pdf(data['pdf'],data['attach_document'],invoice['urlinvoicepdf'],invoice['attacheddocument'],request)
 			return HttpResponse(json.dumps(enviar_email(request,invoice)))
-		return HttpResponse({'result':False,'message':"No se puede emitir factura a "})
+		return HttpResponse(json.dumps({'result':False,'message':"No se puede emitir factura a cosumidor final"}))

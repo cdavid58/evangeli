@@ -103,7 +103,7 @@ ANNULLED_INVOICE_BY_PRODUCT = f"{URL_IN_USE}/invoice/Annulled_Invoice_By_Product
 CREATE_PASS_INVOICE = f"{URL_IN_USE}/invoice/Create_Pass_Invoice/"
 
 ### THERIOSOFT
-PDF_TO_BASE64 = "https://104.248.63.144/api/pdf_to_base64/"
+PDF_TO_BASE64 = "https://theriosoft.com/api/pdf_to_base64/"
 
 
 #REPORT

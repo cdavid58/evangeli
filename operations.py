@@ -32,7 +32,6 @@ class AuthenticationUser:
 			response = requests.request("POST", env.LOGIN, headers=self.headers, data=payload)
 			values = json.loads(response.text)
 			self.request.session['pk_employee'] = values['pk_employee']
-			print(self.request.session['pk_employee'])
 			self.request.session['name_employee'] = values['name']
 			self.request.session['pk_branch'] = values['pk_branch']
 			self.request.session['name_branch'] = values['name_branch']
@@ -41,6 +40,9 @@ class AuthenticationUser:
 			self.request.session['size_permission'] = len(values['permission'])
 			self.request.session['url_seller'] = values['url_seller']
 			self.request.session['html'] = ""
+			path_dir = f"{env.URL_FILES_SERVER}{self.request.session['pk_branch']}"
+			if not os.path.exists(path_dir):
+				os.makedirs(path_dir)
 		except Exception as e:
 			print(e)
 		return json.dumps({'result': values['result'], 'message': values['message']})
@@ -302,27 +304,10 @@ class Invoice:
 		  "attach_document": data['attach_document']
 		})
 		response = requests.request("POST", env.PDF_TO_BASE64, headers=self.headers, data=payload)
+		print(response.text)
 		pdf = json.loads(response.text)
 		return pdf
-		payload = json.dumps({
-		  "prefix": data['prefix'],
-		  "number": str(data['number']),
-		  "showacceptrejectbuttons": True,
-		  "email_cc_list": [
-		    {
-		      "email": "contabilidadtheriosoft@gmail.com"
-		    }
-		  ],
-		  "base64graphicrepresentation": pdf['pdf']
-		})
-		headers = {
-		  'Content-Type': 'application/json',
-		  'accept': 'application/json',
-		  'Authorization':  f'Bearer {data["token"]}'
-		}
-		print(headers)
-		response = requests.request("POST", "http://theriosoft.com:8080/api/ubl2.1/send-email", headers = headers, data=payload)
-		# (response.text)
+		
 
 class Setting:
 	def __init__(self,request):
