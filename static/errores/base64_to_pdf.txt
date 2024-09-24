@@ -1,0 +1,1 @@
+argument should be a bytes-like object or ASCII string, not 'NoneType'

@@ -74,7 +74,7 @@ def Create_PDF_Invoice(data):
     data['ipo'] = Thousands_Separator(round(float(ipo)))
     data['total_letters'] = numero_a_letras(total).upper()
     data['type_invoice'] = int(data['type_document'])
-    data['logo_qr'] = f'{_env.URL_APPLICATION}/static/company/{data['customer']['branch']}/{str(data['number'])}.png'
+    data['logo_qr'] = f'{_env.URL_APPLICATION}/static/company/{data["customer"]["branch"]}/{str(data["number"])}.png'
     print(data)
     html = template.render(data)
     html_file_path = os.path.join(path, f"{name_doc}.html")

@@ -8,6 +8,10 @@
         <h5 class="mb-2 mb-md-0">N° # {{data.number}}</h5>
       </div>
       <div class="col-auto">
+        <a href="{% url 'Get_List_Invoice' request.session.type_document %}" class="btn btn-falcon-default btn-sm me-1 mb-2 mb-sm-0" type="button">
+          <span class="fas fa-arrow-left me-1"> </span>Lista de facturas
+        </a>
+        
         <a href="https://catalogo-vpfe.dian.gov.co/document/searchqr?documentkey={{data.cufe}}" target="_blank" class="btn btn-falcon-default btn-sm me-1 mb-2 mb-sm-0" type="button" id="downloadPdfButton">
           <span class="fas fa-arrow-down me-1"> </span>PDF DIAN
         </a>
@@ -26,7 +30,7 @@
       <div class="col text-sm-end mt-3 mt-sm-0">
         <h2 class="mb-3">
           {% if request.session.type_document == '1' %}
-            Factura POS
+            Factura Electrónica
           {% elif request.session.type_document == '2' %}
             Factura Electrónica
           {% elif request.session.type_document == '11' %}
@@ -88,7 +92,9 @@
       <table class="table table-striped border-bottom">
         <thead class="light">
           <tr class="bg-primary text-white dark__bg-1000">
-            <th class="border-0">&nbsp;</th>
+            {% if data.cude == '' %}
+              <th class="border-0">&nbsp;</th>
+            {% endif %}
             <th class="border-0">Producto</th>
             <th class="border-0 text-center">Cantidad</th>
             <th class="border-0 text-end">Base</th>
@@ -102,11 +108,13 @@
         <tbody>
           {% for i in data.details %}
             <tr>
-              <td>
-                <button class="btn btn-primary np_product_btn" id="{{i.code}}">
-                  NC
-                </button>
-              </td>
+              {% if data.cude == '' %}
+                <td>
+                  <button class="btn btn-primary np_product_btn" id="{{i.code}}">
+                    NC
+                  </button>
+                </td>
+              {% endif %}
               <td class="align-middle">
                 <h6 class="mb-0 text-nowrap name_product{{i.code}}">{{i.name}}</h6>
               </td>
@@ -157,7 +165,10 @@
     </div>
   </div>
   <div class="card-footer bg-light">
-    <p class="fs--1 mb-0"><strong>CUFE: </strong>{{invoice.cufe}}</p>
+    <p class="fs--1 mb-0"><strong>CUFE: </strong><a href="https://catalogo-vpfe.dian.gov.co/document/searchqr?documentkey={{data.cufe}}" target="_blank" class="me-1 mb-2 mb-sm-0" id="downloadPdfButton">{{data.cufe}}</a></p>
+    {% if data.cude != '' %}
+      <p class="fs--1 mb-0"><strong>CUDE: </strong><a href="https://catalogo-vpfe.dian.gov.co/document/searchqr?documentkey={{data.cude}}" target="_blank" class="me-1 mb-2 mb-sm-0" id="downloadPdfButton">{{data.cude}}</a></p>
+    {% endif %}
   </div>
 </div>
 
@@ -217,7 +228,7 @@
           }
         })
       })
-
+      //href="https://wa.me/?text=Aquí%20tienes%20el%20PDF%20de%20tu%20factura:%20https://evansoft.ddns.net/static/company/{{request.session.pk_branch}}/FES-{{data.prefix}}{{data.number}}.pdf"
 
 
       $(".copy_invoice").click(function(){

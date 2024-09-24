@@ -1,0 +1,1 @@
+HTTPSConnectionPool(host='104.248.63.144', port=443): Max retries exceeded with url: /api/pdf_to_base64/ (Caused by SSLError(CertificateError("hostname '104.248.63.144' doesn't match 'theriosoft.com'",),))
