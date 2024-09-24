@@ -1082,6 +1082,7 @@
 		}
 
 		function Save_Invoice() {
+<<<<<<< HEAD
 	    $('#question_money_client_{{tab_id}}').modal('hide');
 	    $(".loader_{{tab_id}}").click();
 	    $.ajax({
@@ -1154,6 +1155,71 @@
 	            $("#loader1_{{tab_id}}").modal("hide");
 	        }
 	    });
+=======
+		    $('#question_money_client_{{tab_id}}').modal('hide');
+		    // $(".loader_{{tab_id}}").click()
+		    $.ajax({
+		        url: "{% url 'Save_Invoice' %}",
+		        method: "POST",
+		        data: {
+		            csrfmiddlewaretoken: '{{ csrf_token }}',
+		            'headers': Data_Header(),
+		            'details_invoice': GenerateTableJSON()
+		        },
+		        success: function(e) {
+	            e = JSON.parse(e)
+	            console.log(e)
+	            if (e.result) {
+	                localStorage.removeItem(referens_header_{{tab_id|safe}});
+	                localStorage.removeItem(referens_body_{{tab_id|safe}});
+	                recovery_invoice_saved();
+
+	                // Configurar la ventana emergente para la factura como antes
+	                let screenWidth = window.screen.width;
+									let screenHeight = window.screen.height;
+									let windowWidth = 800;
+									let windowHeight = 600;
+									let leftPosition = (screenWidth - windowWidth) / 2;
+									let topPosition = (screenHeight - windowHeight) / 2;
+									let params = `scrollbars=no,resizable=no,status=no,location=no,toolbar=no,menubar=no,width=${windowWidth},height=${windowHeight},left=${leftPosition},top=${topPosition}`;
+									let printWindow = window.open("{{request.session.url}}/invoice/Print_Invoice/" + e.pk_invoice, "invoice", params);
+									if (printWindow) {
+									  printWindow.onload = function() {
+									    printWindow.document.body.style.zoom = "100%";
+									    printWindow.print();
+									    printWindow.onafterprint = function () {
+									      printWindow.close();
+									    };
+									  };
+									}
+
+
+	                // Llamar a la función para imprimir con QZ Tray
+	                // imprimirConQZ(e.pk_invoice);
+	                recovery_invoice_saved()
+	                Clean();
+	                $("#loader1_{{tab_id}}").modal("hide");
+	                $.ajax({
+						        url:"{% url 'Send_Email_DIAN' %}",
+						        data:{"pk_invoice":e.pk_invoice},
+						        success: function(e){
+						          e = JSON.parse(e)
+						          if(e.result){
+						            noti_person(e.message, "Tarea Finalizada");
+						          }
+						          else{
+						            noti_person(e.message, "Error en la solicitud");
+						          }
+						        }
+						      })
+
+	            } else {
+	                noti_person('ERROR', e.message);
+	                $(".quantity_{{tab_id}}").val('');
+	            }
+		        }
+		    });
+>>>>>>> fcce1250637949c4253f5212ecfaac71d2f5683d
 		}
 
 
