@@ -83,7 +83,7 @@
     </div>
     <!--/.bg-holder-->
 
-    <div class="avatar avatar-5xl avatar-profile"><img class="rounded-circle img-thumbnail shadow-sm" src="{% static 'assets/img/team/2.jpg' %}" width="200" alt="" /></div>
+    <div class="avatar avatar-5xl avatar-profile"><img class="rounded-circle img-thumbnail shadow-sm" src="{{user.img}}" width="200" alt="" /></div>
   </div>
   <div class="card-body">
     <div class="row">
@@ -96,17 +96,15 @@
             </span>
           {% endif %}
         </h4>
-        <h5 class="fs-0 fw-normal">Senior Software Engineer at Technext Limited</h5>
+        <!-- <h5 class="fs-0 fw-normal">Senior Software Engineer at Technext Limited</h5> -->
         <p class="text-500">{{user.municipality_name}} - Colombia</p>
         <p class="text-500">{{user.email}}</p>
-        {% if request.session.permission %}
-          {% for i in request.session.permission %}
-            {% if i == "Facturacion"  or i == "Todos" %}
-              <button class="btn btn-falcon-primary btn-sm px-3 declared_basic_payroll" type="button">Declarar Nomina Básica</button>
-              <!-- <button class="btn btn-falcon-default btn-sm px-3 ms-2" type="button">Message</button> -->
-            {% endif %}
-          {% endfor %}
+        {% if "Todos" in request.session.permission %}
+          <button class="btn btn-falcon-primary btn-sm px-3 declared_basic_payroll" type="button">Declarar Nomina Básica</button>
+          <button class="btn btn-falcon-primary btn-sm px-3 ml-2 edit text-success" id="{{user.pk_employee}}"  type="button">Editar</button>
+          <!-- <button class="btn btn-falcon-default btn-sm px-3 ms-2" type="button">Message</button> -->
         {% endif %}
+        <button class="btn btn-falcon-primary btn-sm px-3 ml-2 list_product text-danger" type="button">Lista de Usuarios</button>
         <div class="border-dashed-bottom my-4 d-lg-none"></div>
       </div>
       <div class="col ps-2 ps-lg-3">
@@ -447,6 +445,10 @@
         })
       })
 
+      $(document).on('click','.edit',function(){
+        location.href = '{{request.session.url}}/Get_Employee/'+this.id
+      })
+
       $(".close_btn_payroll").click(function(){$(".note_payroll").val('')})
       $(".close_modal_payroll_deleted").click(function(){$(".note_payroll").val('')})
 
@@ -475,6 +477,10 @@
         var id = $(this).attr('id');
         var url = `https://catalogo-vpfe.dian.gov.co/document/ShowDocumentToPublic/${id}`
         window.open(url, '_blank');
+      })
+
+      $(".list_product").click(function(){
+        location.href = "{% url 'List_Employee' %}"
       })
 
       $(".generate_payroll_employee").click(function(){

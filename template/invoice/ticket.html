@@ -44,11 +44,7 @@
 
     .table {
         width: 100%;
-<<<<<<< HEAD
         font-size: 14px;
-=======
-        font-size: 12px;
->>>>>>> fcce1250637949c4253f5212ecfaac71d2f5683d
         border-collapse: collapse;
     }
 
@@ -133,8 +129,8 @@
 
         <table class="table">
             <tr>
-                <td style="text-align: left; font-size: 10px;">CC o NIT: {{invoice.customer.identification_number}}</td>
-                <td style="text-align: left; font-size: 10px;">Forma de Pago:
+                <td style="text-align: left; font-size: 14px;">CC o NIT: {{invoice.customer.identification_number}}</td>
+                <td style="text-align: left; font-size: 14px;">Forma de Pago:
                     {% if invoice.payment_form.payment_form == 1 %}
                         Contado
                     {% else %}
@@ -144,28 +140,28 @@
                 </td>
             </tr>
             <tr>
-                <td style="text-align: left; font-size: 10px;">Cliente: {{invoice.customer.name}}</td>
-                <td style="text-align: left; font-size: 10px;">Medio de Pago: {{invoice.payment_form.name_payment_method}}  </td>
+                <td style="text-align: left; font-size: 14px;">Cliente: {{invoice.customer.name}}</td>
+                <td style="text-align: left; font-size: 14px;">Medio de Pago: {{invoice.payment_form.name_payment_method}}  </td>
             </tr>
             <tr>
-                <td style="text-align: left; font-size: 10px;">Dirección: 
+                <td style="text-align: left; font-size: 14px;">Dirección: 
                     {% if invoice.customer.identification_number == 222222222222 %}
                         {{invoice.branch.address}}
                     {% else %}
                         {{invoice.customer.address}}
                     {% endif %}
                 </td>
-                <td style="text-align: left; font-size: 10px;">Plazo Para Pagar: 0 Días</td>
+                <td style="text-align: left; font-size: 14px;">Plazo Para Pagar: 0 Días</td>
             </tr>
             <tr>
-                <td style="text-align: left; font-size: 10px;">Teléfono: 
+                <td style="text-align: left; font-size: 14px;">Teléfono: 
                     {% if invoice.customer.identification_number == 222222222222 %}
                         {{invoice.branch.phone}}
                     {% else %}
                         {{invoice.customer.phone}}
                     {% endif %}
                 </td>
-                <td style="text-align: left; font-size: 10px;">Fecha Vencimiento: {{invoice.payment_form.payment_due_date}}</td>
+                <td style="text-align: left; font-size: 14px;">Fecha Vencimiento: {{invoice.payment_form.payment_due_date}}</td>
             </tr>
         </table>
         <br>

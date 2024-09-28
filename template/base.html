@@ -6,6 +6,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="google-site-verification" content="Dc5yd_N3eSAbsxLNbqnUWMnUQXxzUkcFSCnSY7MO-Ho" />
     <meta name="generator" content="Gatsby 4.25.8">
     <meta data-react-helmet="true" charset="utf-8">
     <meta data-react-helmet="true" name="robots" content="index">
@@ -31,6 +32,53 @@
     <meta name="theme-color" content="#ffffff">
     <script src="{% static 'assets/js/config.js' %}"></script>
     <script src="{% static 'vendors/overlayscrollbars/OverlayScrollbars.min.js' %}"></script>
+
+    <!-- SEO Metas -->
+    <meta name="description" content="Evansoft es un software Contable y Administrativo para micro, pequeñas y medianas empresas. Nómina electrónica y Facturación en segundos.">
+    <meta name="keywords" content="software, contable, administrativos, evansoft, aplicacion, factura, invoice, inventario, inventory, dian">
+    <meta name="robots" content="index, follow">
+    <meta name="googlebot" content="index, follow">
+    <meta name="author" content="Carlos D. Del Aguila" />
+    <meta name="copyright" content="© 2024 Evansoft">
+    <meta name="google" content="notranslate">
+    <meta name="rating" content="general">
+    <meta name="distribution" content="global">
+    <meta name="revisit-after" content="7 days">
+
+
+    <!-- Open Graph (OG) Metas -->
+    <meta property="og:title" content="Evansoft | Software Contable y Administrativo, Ideal para Pymes">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://evansoft.ddns.net/">
+    <meta property="og:image" content="https://evansoft.ddns.net/static/images/logo.png">
+    <meta property="og:description" content="Evansoft es un software contable y administrativo ideal para pequeñas y medianas empresas.">
+
+    <!-- Twitter Card Metas -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Evansoft | Software Contable y Administrativo para Pymes">
+    <meta name="twitter:description" content="Evansoft es un software contable ideal para pequeñas empresas con funciones de nómina electrónica y facturación rápida.">
+    <meta name="twitter:image" content="https://evansoft.ddns.net/static/images/logo.png">
+    <meta name="twitter:site" content="@evansoft">
+
+
+    <link rel="canonical" href="https://evansoft.ddns.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "Evansoft",
+        "description": "Software contable y administrativo ideal para Pymes.",
+        "operatingSystem": "Windows, MacOS, Linux",
+        "applicationCategory": "AccountingSoftware",
+        "offers": {
+          "@type": "Offer",
+          "priceCurrency": "COP",
+          "price": "150000",
+          "url": "https://evansoft.ddns.net/comprar"
+        }
+      }
+    </script>
 
     <link href="{% static 'vendors/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -194,7 +242,7 @@
               <li class="nav-item dropdown">
                 <a class="nav-link pe-0" id="navbarDropdownUser" href="javascript:void(0);" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <div class="avatar avatar-xl">
-                    <img class="rounded-circle photo_miniature_profile" src="{{request.session.logo}}" alt="" />
+                    <img class="rounded-circle photo_miniature_profile" src="{{request.session.img_user}}" alt="" />
                   </div>
                 </a>
                 <div class="dropdown-menu dropdown-menu-end py-0" aria-labelledby="navbarDropdownUser">
@@ -503,7 +551,7 @@
               console.log(e)
               if(e.result){
                 noti_person("El reporte se descargo",'Tarea Finalizada')
-                $("#downloadLink").attr("href", e.path_file);
+                $("#downloadLink").attr("href", "{{request.session.url_application}}/static/company/{{request.session.pk_branch}}/Informe.pdf");
                 $("#downloadLink")[0].click();
               }
               else{

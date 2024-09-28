@@ -1,7 +1,7 @@
 {% extends '../base.html' %}
 {% block content %}
 
-<!-- <div class="card mb-3 p-1" data-date="{{ i.registration_date }}">
+<div class="card mb-3 p-1" data-date="{{ i.registration_date }}">
   <div class="card-body p-2 overflow-hidden">
     <div class="row">
       <div class="col-md-3 col-12">
@@ -25,7 +25,7 @@
       <table class="table">
         <thead>
           <tr>
-            <th class="text-dark fs-0">Image</th>
+            <!-- <th class="text-dark fs-0">Image</th> -->
             <th class="text-dark fs-0">Documento I.</th>
             <th class="text-dark">Nombre de usuario</th>
             <th class="text-dark">Activo</th>
@@ -39,9 +39,9 @@
         <tbody>
           {% for i in page_obj %}
             <tr>
-              <td class="text-dark">
+              <!-- <td class="text-dark">
                 <a href="{{i.fields.img}}" target="_blank"><img class="img-fluid rounded-circle rounded-2 me-3 d-none d-md-block" src="{{i.fields.img}}" alt="Image Profile" alt="" width="60" /></a>
-              </td>
+              </td> -->
               <td class="text-dark name{{i.pk}}">{{i.fields.identification_number}}</td>
               <td class="text-dark">{{i.fields.first_name|title}} {{i.fields.surname|title}} </td>
               <td class="text-dark">{% if i.fields.active %}Conectado{% else %}Desconectado{% endif %}</td>
@@ -62,9 +62,9 @@
       </table>
     </div>
   </div>
-</div> -->
+</div>
 
-<!-- {% if page_obj.has_other_pages %}
+{% if page_obj.has_other_pages %}
 <div class="card-footer border-top d-flex justify-content-center">
     {% if page_obj.has_previous %}
       <a class="btn btn-falcon-default btn-sm me-2" href="?page=1" data-bs-toggle="tooltip" data-bs-placement="top" title="First">
@@ -86,46 +86,7 @@
     </a>
     {% endif %}
 </div>
-{% endif %} -->
-
-
-
-<div class="card">
-  <div class="card-header bg-light">
-    <div class="row align-items-center">
-      <div class="col">
-        <h5 class="mb-0" id="followers">Lista de empleados</h5>
-      </div>
-      <div class="col">
-        <form>
-          <div class="row g-0">
-            <div class="col-3 ml-auto">
-              <a class="btn btn-info" href="{% url 'Create_Employee' %}">Crear Usuario</a>
-            </div>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-  <div class="card-body bg-light px-1 py-0">
-    <div class="row g-0 text-center fs--1 dark__bg-1100">
-      {% for i in page_obj %}
-        <div class="col-6 col-md-4 col-lg-3 col-xxl-2 mb-1">
-          <div class="bg-white dark__bg-1100 p-3 h-100"><a href="javascript:void();" class="view_employee" id="{{i.pk}}"><img class="img-thumbnail img-fluid rounded-circle mb-3 shadow-sm" src="{{i.fields.img}}" alt="" width="100" /></a>
-            <h6 class="mb-1"><a href="javascript:void();" class="view_employee" id="{{i.pk}}" >{{i.fields.first_name|title}} {{i.fields.surname|title}}</a>
-            </h6>
-            {% if i.fields.active %}
-              <p class="fs--2 mb-1 text-success">Conectado</p>
-            {% else %}
-              <p class="fs--2 mb-1 text-danger">Desconectado</p>
-            {% endif %}
-          </div>
-        </div>
-      {% endfor %}
-    </div>
-  </div>
-</div>
-
+{% endif %}
 
 {% endblock %}
 {% block script %}

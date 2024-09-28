@@ -15,9 +15,9 @@
         <a href="https://catalogo-vpfe.dian.gov.co/document/searchqr?documentkey={{data.cufe}}" target="_blank" class="btn btn-falcon-default btn-sm me-1 mb-2 mb-sm-0" type="button" id="downloadPdfButton">
           <span class="fas fa-arrow-down me-1"> </span>PDF DIAN
         </a>
-        <a href="{% url 'GetPDF' data.pk_invoice %}" target="_blank" class="btn btn-falcon-default btn-sm me-1 mb-2 mb-sm-0" type="button" id="downloadPdfButton">
+        <!-- <a href="{% url 'GetPDF' data.pk_invoice %}" target="_blank" class="btn btn-falcon-default btn-sm me-1 mb-2 mb-sm-0" type="button" id="downloadPdfButton">
           <span class="fas fa-arrow-down me-1"> </span>Download (.pdf)
-        </a>
+        </a> -->
         <button class="btn btn-falcon-default btn-sm me-1 mb-2 mb-sm-0 copy_invoice" id="{{data.pk_invoice}}" type="button"><span class="fas fa-print me-1"> </span></button>
       </div>
     </div>
@@ -166,7 +166,7 @@
   </div>
   <div class="card-footer bg-light">
     <p class="fs--1 mb-0"><strong>CUFE: </strong><a href="https://catalogo-vpfe.dian.gov.co/document/searchqr?documentkey={{data.cufe}}" target="_blank" class="me-1 mb-2 mb-sm-0" id="downloadPdfButton">{{data.cufe}}</a></p>
-    {% if data.cude != '' %}
+    {% if data.cude is not None %}
       <p class="fs--1 mb-0"><strong>CUDE: </strong><a href="https://catalogo-vpfe.dian.gov.co/document/searchqr?documentkey={{data.cude}}" target="_blank" class="me-1 mb-2 mb-sm-0" id="downloadPdfButton">{{data.cude}}</a></p>
     {% endif %}
   </div>

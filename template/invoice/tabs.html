@@ -41,19 +41,56 @@
 	<div class="card-body">
 	  <div class="row">
 			<div class="row">
-				<div class="mb-3 col-md-2 col-12">
-				  <label class="form-label" for="exampleFormControlInput1">Precio 1</label>
-				  <input class="form-control price_1_{{tab_id}}" disabled name="price_1" type="number" />
-				</div>
-				<div class="mb-3 col-md-2 col-12">
-				  <label class="form-label" for="exampleFormControlInput1">Precio 2</label>
-				  <input class="form-control price_2_{{tab_id}}" disabled name="price_2" type="number" />
-				</div>
-				<div class="mb-3 col-md-2 col-12">
-				  <label class="form-label" for="exampleFormControlInput1">Precio 3</label>
-				  <input class="form-control price_3_{{tab_id}}" disabled name="price_3" type="number" />
-				</div>
-				{% if 'Todos' in permission  %}
+				{% if 'Facturacion' in permission %}
+					{% if unit %}
+						<div class="mb-3 col-md-2 col-12">
+						  <label class="form-label" for="exampleFormControlInput1">Precio 1</label>
+						  <input class="form-control price_1_{{tab_id}}" disabled name="price_1" type="number" />
+						</div>
+					{% endif %}
+					{% if bale %}
+						<div class="mb-3 col-md-2 col-12">
+						  <label class="form-label" for="exampleFormControlInput1">Precio 2</label>
+						  <input class="form-control price_2_{{tab_id}}" disabled name="price_2" type="number" />
+						</div>
+					{% endif %}
+					{% if quantity %}
+						<div class="mb-3 col-md-2 col-12">
+						  <label class="form-label" for="exampleFormControlInput1">Precio 3</label>
+						  <input class="form-control price_3_{{tab_id}}" disabled name="price_3" type="number" />
+						</div>
+					{% endif %}
+					{% if unit %}
+						<div class="mb-3 col-md-2 col-12">
+						  <label class="form-label" for="exampleFormControlInput1">Precio 4</label>
+						  <input class="form-control price_4_{{tab_id}}" disabled name="price_4" type="number" />
+						</div>
+					{% endif %}
+					{% if bale %}
+						<div class="mb-3 col-md-2 col-12">
+						  <label class="form-label" for="exampleFormControlInput1">Precio 5</label>
+						  <input class="form-control price_5_{{tab_id}}" disabled name="price_5" type="number" />
+						</div>
+					{% endif %}
+					{% if quantity %}
+						<div class="mb-3 col-md-2 col-12">
+						  <label class="form-label" for="exampleFormControlInput1">Precio 6</label>
+						  <input class="form-control price_6_{{tab_id}}" disabled name="price_6" type="number" />
+						</div>
+					{% endif %}
+				{% else %}
+					<div class="mb-3 col-md-2 col-12">
+					  <label class="form-label" for="exampleFormControlInput1">Precio 1</label>
+					  <input class="form-control price_1_{{tab_id}}" disabled name="price_1" type="number" />
+					</div>
+					<div class="mb-3 col-md-2 col-12">
+					  <label class="form-label" for="exampleFormControlInput1">Precio 2</label>
+					  <input class="form-control price_2_{{tab_id}}" disabled name="price_2" type="number" />
+					</div>
+					<div class="mb-3 col-md-2 col-12">
+					  <label class="form-label" for="exampleFormControlInput1">Precio 3</label>
+					  <input class="form-control price_3_{{tab_id}}" disabled name="price_3" type="number" />
+					</div>
 					<div class="mb-3 col-md-2 col-12">
 					  <label class="form-label" for="exampleFormControlInput1">Precio 4</label>
 					  <input class="form-control price_4_{{tab_id}}" disabled name="price_4" type="number" />
@@ -174,6 +211,7 @@
 	          <th class="fs-0 text-dark">Código</th>
 	          <th class="text-dark">Descripción</th>
 	          <th class="text-dark">Cantidad</th>
+	          <th class="text-dark">T.Precio</th>
 	          <th class="text-dark">Base</th>
 	          <th class="text-dark">IVA</th>
 	          <th class="text-dark">Descuento</th>
@@ -697,21 +735,25 @@
         referens_header = "Headers_{{tab_id}}_" + referens;
         active_account = true
         for (var i = 0; i < items.length; i++) {
-            products_{{tab_id|safe}}.push(items[i]);
-            id_product_{{tab_id|safe}} = items[i].pk_product
-            value = items[i].quantity
-            console.log(value+ ' Cantidad reservada')
-            $.ajax({            	
-              data: { 'pk_product': id_product_{{tab_id|safe}}, 'quantity': value },
-              success: function (e) {
-                  if (e) {
-                    UpdateExistingProduct(id_product_{{tab_id|safe}}, value);
-								    $(".quantity_{{tab_id}}").focus('')
-                  } else {
-                      alert("Error al reservar el producto");
-                  }
-                }
-            });
+          products_{{tab_id|safe}}.push(items[i]);
+          id_product_{{tab_id|safe}} = items[i].pk_product
+          value = items[i].quantity
+          datos = { 'pk_product': items[i].pk_product,'type_price':1, 'quantity': value }
+          $.ajax({            	
+            data: datos,
+            success: function (e) {
+            	console.log(e)
+              if (e) {
+                UpdateExistingProduct(id_product_{{tab_id|safe}}, value);
+						    $(".quantity_{{tab_id}}").focus('')
+              } else {
+                  alert("Error al reservar el producto");
+              }
+            },
+            error: function(xhr, status, error) {
+	            console.log('Error en la solicitud AJAX:', status, error);
+		        }
+          });
             
         }
         $('.close_invoice_save').click();
@@ -721,6 +763,7 @@
         recovery_invoice_saved()
 	    }
 		});
+
 		$(".invent_excel_{{tab_id}}").on('hidden.bs.modal', function () {
 		  $(".quantity_{{tab_id}}").focus()
 		});
@@ -833,8 +876,7 @@
 
    	$(".save_account_{{tab_id}}").click(function(){
     	if($(".referens_{{tab_id}}").val().length >= 5){
-	    	Data_Header()
-	    	GenerateTableJSON()
+	    	console.log(GenerateTableJSON())
 	    	headers = Data_Header()
 	    	details_invoice = GenerateTableJSON()
 	    	localStorage.setItem("Headers_{{tab_id}}_"+$(".referens_{{tab_id}}").val(),headers)
@@ -915,20 +957,21 @@
 		function GenerateTableJSON() {
 		    const tableRows = $(".row_product_{{tab_id}} tr");
 		    const jsonData = [];
-
 		    tableRows.each(function() {
 		        const row = $(this);
 		        const pk_product = row.find("td:eq(0)").text();
 		        const code = row.find("td:eq(1)").text();
 		        const product = row.find("td:eq(2)").text();
 		        const quantity = parseInt(row.find("td:eq(3)").text());
-		        const price = parseFloat(row.find("td:eq(4)").text());
-		        const costo = parseFloat(row.find("td:eq(4)").text());
-		        const tax = parseFloat(row.find("td:eq(5)").text());
-		        const discount = parseFloat(row.find("td:eq(6)").text());
-		        const ipo = parseFloat(row.find("td:eq(7)").text());
+		        const type_price = parseInt(row.find("td:eq(4)").text());
+		        const price = parseFloat(row.find("td:eq(5)").text());
+		        const costo = parseFloat(row.find("td:eq(5)").text());
+		        const tax = parseFloat(row.find("td:eq(6)").text());
+		        const discount = parseFloat(row.find("td:eq(7)").text());
+		        const ipo = parseFloat(row.find("td:eq(8)").text());
 		        const totalValue = parseFloat(row.find("td:eq(9)").text());
-		        jsonData.push({pk_product,code,product,quantity,price,tax,discount,ipo,totalValue});
+
+		        jsonData.push({pk_product,code,product,quantity,type_price,price,costo,tax,discount,ipo,totalValue});
 		    });
 
 		    return JSON.stringify(jsonData, null, 2); // Formateo para mejor legibilidad
@@ -945,11 +988,11 @@
 	      for(i=0; i<filas.length; i++){
           var celdas = $(filas[i]).find("td")
           _quantity = parseFloat($(celdas[3]).text())
-        	subtotal_row_table_invoice += parseFloat($(celdas[4]).text()) * _quantity
-        	impoconsumo += parseFloat($(celdas[7]).text()) * _quantity
-        	impuestos += parseFloat($(celdas[5]).text()) * _quantity
+        	subtotal_row_table_invoice += parseFloat($(celdas[5]).text()) * _quantity
+        	impoconsumo += parseFloat($(celdas[8]).text()) * _quantity
+        	impuestos += parseFloat($(celdas[6]).text()) * _quantity
         	console.log(parseFloat($(celdas[6]).text()))
-        	discount += parseFloat($(celdas[6]).text()) * _quantity
+        	discount += parseFloat($(celdas[7]).text()) * _quantity
 	      }
       	$(".subtotal_{{tab_id}}").text(subtotal_row_table_invoice.toFixed(0))
 	      $(".ico_{{tab_id}}").text(impoconsumo.toFixed(0))
@@ -1000,12 +1043,14 @@
 			    const tax_grabable = (base_g * (parseInt(_product['tax']) / 100))
 			    const subtotal = base_g
 			    const totalValue = TotalValue(quantity,tax_grabable,base_g, ipo)
+			    const _type_price = $(".price_{{tab_id}}").val()
 			    $(".row_product_{{tab_id}}").append(`
 			        <tr>
 			            <td hidden class="${_product.code}">${_product.code}</td>
 			            <td class="${_product.code}">${_product.code}</td>
 			            <td>${_product.name}</td>
 			            <td class="text-center">${quantity}</td>
+			            <td>${_type_price}</td>
 			            <td>${base_g.toFixed(0)}</td>
 			            <td>${tax_grabable.toFixed(0)}</td>
 			            <td>${discount.toFixed(0)}</td>
@@ -1022,24 +1067,30 @@
 			  }
 		  }
 		  else{
-		  	const baseWithDiscount =  _product.price
-		    const taxValue = _product.tax
-		    const totalValue = _product.totalValue
-		    const subtotal = _product.price * _product.quantity
+		  	console.log(_product+' Product')
+		  	console.log(_product.length + ' Len Product')
+		  	// for(i = 0; i < _product.length; i++){
+		  	const baseWithDiscount =  _product[i].price
+		    const taxValue = _product[i].tax
+		    const totalValue = _product[i].totalValue
+		    const subtotal = _product[i].price * _product[i].quantity
 		    $(".row_product_{{tab_id}}").append(`
 		        <tr>
-		            <td hidden class="${_product.pk_product}">${_product.pk_product}</td>
-		            <td class="${_product.code}">${_product.code}</td>
-		            <td>${_product.product}</td>
+		            <td hidden class="${_product[i].pk_product}">${_product[i].pk_product}</td>
+		            <td class="${_product[i].code}">${_product[i].code}</td>
+		            <td>${_product[i].product}</td>
 		            <td class="text-center">${quantity}</td>
+		            <td>${_product[i].type_price}</td>
 		            <td>${baseWithDiscount}</td>
 		            <td>${taxValue}</td>
-		            <td>${_product.discount}</td>
-		            <td>${_product.ipo}</td>
+		            <td>${_product[i].discount}</td>
+		            <td>${_product[i].ipo}</td>
 		            <td>${subtotal.toFixed(2)}</td>
 		            <td>${totalValue}</td>
+		            <td class"text-center"><span class="fas fa-trash-alt delete_product_row{{tab_id}}" id="${_product[i].code}"></span></td>
 		        </tr>
 		    `);
+			  // }
 		  }
 		  $(".stock_{{tab_id}}").val(parseInt($(".stock_{{tab_id}}").val()) - quantity)
 		  CalculateTotalsInvoice();
@@ -1082,7 +1133,6 @@
 		}
 
 		function Save_Invoice() {
-<<<<<<< HEAD
 	    $('#question_money_client_{{tab_id}}').modal('hide');
 	    $(".loader_{{tab_id}}").click();
 	    $.ajax({
@@ -1097,7 +1147,6 @@
 	            try {
 	                const e = JSON.parse(response);
 	                console.log(e);
-
 	                if (e.result) {
 	                    localStorage.removeItem(referens_header_{{tab_id|safe}});
 	                    localStorage.removeItem(referens_body_{{tab_id|safe}});
@@ -1122,6 +1171,7 @@
 	                            };
 	                        };
 	                    }
+
 	                    $.ajax({
 	                        url: "{% url 'Send_Email_DIAN' %}",
 	                        data: { "pk_invoice": e.pk_invoice },
@@ -1143,10 +1193,12 @@
 	                } else {
 	                    noti_person('ERROR', e.message);
 	                    $(".quantity_{{tab_id}}").val('');
+	                    $("#loader1_{{tab_id}}").modal("hide");
 	                }
 	            } catch (err) {
 	                console.error('Error en el procesamiento de la respuesta:', err);
 	                noti_person('Error de procesamiento', 'ERROR');
+	                $("#loader1_{{tab_id}}").modal("hide");
 	            }
 	        },
 	        error: function(xhr, status, error) {
@@ -1155,7 +1207,6 @@
 	            $("#loader1_{{tab_id}}").modal("hide");
 	        }
 	    });
-=======
 		    $('#question_money_client_{{tab_id}}').modal('hide');
 		    // $(".loader_{{tab_id}}").click()
 		    $.ajax({
@@ -1219,7 +1270,6 @@
 	            }
 		        }
 		    });
->>>>>>> fcce1250637949c4253f5212ecfaac71d2f5683d
 		}
 
 
@@ -1290,9 +1340,10 @@
 		function saveTableData() {
 	    let tableData = [];
 	    $(".row_product_{{tab_id}} tr").each(function () {
+	    		console.log($(this))
 	        let row = {
-	            code: $(this).find("td:eq(0)").text(),
-	            name: $(this).find("td:eq(1)").text(),
+	            code: $(this).find("td:eq(1)").text(),
+	            name: $(this).find("td:eq(2)").text(),
 	            quantity: $(this).find("td:eq(3)").text(),
 	            base: $(this).find("td:eq(4)").text(),
 	            tax: $(this).find("td:eq(5)").text(),
@@ -1341,6 +1392,7 @@
 		                    <td class="${row.code}">${row.code}</td>
 		                    <td>${row.name}</td>
 		                    <td class="text-center">${row.quantity}</td>
+		                    <td class="text-center">${row.type_price}</td>
 		                    <td>${parseFloat(row.base).toFixed(2)}</td>
 		                    <td>${parseFloat(row.tax).toFixed(2)}</td>
 		                    <td>${parseFloat(row.discount).toFixed(2)}</td>
@@ -1360,14 +1412,6 @@
 		        CalculateTotalsInvoice();
 		    }
 		}
-
-
-
-
-
-
-
-
 
 		function updateTableAndSave() {
 	    // Actualiza la tabla (por ejemplo, después de eliminar una fila)
